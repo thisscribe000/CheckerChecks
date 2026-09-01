@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KITLIST - TODAY</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "primary-container": "#1c1b1b",
+                        "inverse-on-surface": "#f2f1ed",
+                        "primary": "#000000",
+                        "on-tertiary-container": "#4c7fef",
+                        "surface-container": "#efeeea",
+                        "outline": "#747878",
+                        "tertiary-container": "#001946",
+                        "secondary": "#af3018",
+                        "primary-fixed": "#e5e2e1",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed": "#dae2ff",
+                        "secondary-container": "#fe694b",
+                        "surface": "#faf9f5",
+                        "on-primary-fixed-variant": "#474746",
+                        "on-background": "#1b1c1a",
+                        "surface-container-low": "#f4f4f0",
+                        "inverse-primary": "#c8c6c5",
+                        "surface-bright": "#faf9f5",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "surface-container-high": "#e9e8e4",
+                        "surface-variant": "#e3e2df",
+                        "background": "#faf9f5",
+                        "on-primary-container": "#858383",
+                        "inverse-surface": "#2f312e",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#8d1702",
+                        "tertiary": "#000000",
+                        "on-tertiary-fixed-variant": "#00419f",
+                        "surface-dim": "#dbdad6",
+                        "secondary-fixed-dim": "#ffb4a5",
+                        "outline-variant": "#c4c7c7",
+                        "on-secondary-container": "#650c00",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-surface": "#1b1c1a",
+                        "on-secondary-fixed": "#3e0500",
+                        "tertiary-fixed-dim": "#b1c5ff",
+                        "surface-tint": "#5f5e5e",
+                        "on-tertiary-fixed": "#001946",
+                        "on-error-container": "#93000a",
+                        "on-surface-variant": "#444748",
+                        "secondary-fixed": "#ffdad3",
+                        "surface-container-highest": "#e3e2df"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "rule-weight": "1px",
+                        "gutter": "16px",
+                        "unit": "4px",
+                        "margin-edge": "20px"
+                    },
+                    "fontFamily": {
+                        "number-display": ["Space Mono"],
+                        "headline-lg": ["DM Sans"],
+                        "body-md": ["DM Sans"],
+                        "display": ["DM Sans"],
+                        "label-mono": ["Space Mono"],
+                        "headline-lg-mobile": ["DM Sans"]
+                    },
+                    "fontSize": {
+                        "number-display": ["18px", { "lineHeight": "18px", "fontWeight": "700" }],
+                        "headline-lg": ["28px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display": ["40px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-mono": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "28px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 300;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface h-full flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface text-primary dark:text-primary-fixed font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg docked full-width top-0 border-b border-outline dark:border-outline-variant flat no shadows hover:bg-surface-container dark:hover:bg-primary-container transition-colors duration-75 ease-linear flex justify-between items-center w-full px-margin-edge h-14 sticky z-50 shrink-0">
+<button aria-label="Menu" class="p-unit -ml-unit hover:bg-surface-container-high rounded transition-colors">
+<span class="material-symbols-outlined text-primary">menu</span>
+</button>
+<span class="font-headline-lg-mobile text-headline-lg-mobile tracking-tighter text-primary dark:text-primary-fixed">KITLIST</span>
+<button aria-label="Search" class="p-unit -mr-unit hover:bg-surface-container-high rounded transition-colors">
+<span class="material-symbols-outlined text-primary">search</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto px-margin-edge py-gutter pb-32">
+<!-- Today Header -->
+<div class="border-b border-outline pb-gutter mb-gutter">
+<h1 class="font-display text-display text-primary">TODAY</h1>
+<p class="font-label-mono text-label-mono text-on-surface-variant mt-unit">WORKSHEET // DAILY OVERVIEW</p>
+</div>
+<!-- Main Gig Focus -->
+<section class="border border-outline bg-surface p-gutter mb-gutter relative group hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex justify-between items-start mb-gutter">
+<div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">WEDDING SHOOT</h2>
+<p class="font-label-mono text-label-mono text-on-surface-variant mt-unit flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">calendar_today</span>
+                        SAT · 2:00 PM
+                    </p>
+</div>
+<div class="border border-outline px-2 py-1 text-on-surface">
+<span class="font-label-mono text-label-mono">GIG-042</span>
+</div>
+</div>
+<!-- Packing Progress -->
+<div class="mt-gutter pt-gutter border-t border-outline">
+<div class="flex justify-between items-end mb-2">
+<span class="font-label-mono text-label-mono text-on-surface-variant uppercase">Packing Status</span>
+<span class="font-number-display text-number-display text-primary">14 / 18</span>
+</div>
+<!-- Thin Progress Line -->
+<div class="h-[2px] w-full bg-outline-variant relative overflow-hidden">
+<div class="absolute top-0 left-0 h-full bg-primary" style="width: 77%;"></div>
+</div>
+<div class="flex justify-between mt-2">
+<span class="font-label-mono text-label-mono text-on-surface-variant opacity-60">Lenses packed</span>
+<span class="font-label-mono text-label-mono text-secondary opacity-80">Missing: Batteries</span>
+</div>
+</div>
+<!-- Quick Action overlay on hover -->
+<button class="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 flex items-center justify-center bg-surface/80 backdrop-blur-sm transition-opacity duration-200 z-10">
+<span class="bg-primary text-on-primary font-label-mono text-label-mono px-4 py-2 border border-primary">OPEN PACKING LIST</span>
+</button>
+</section>
+<!-- Next Gig Section -->
+<section class="border-t border-outline pt-gutter mb-gutter">
+<h3 class="font-label-mono text-label-mono text-on-surface-variant uppercase mb-gutter">NEXT GIG</h3>
+<div class="border border-outline bg-surface p-gutter flex justify-between items-center group hover:bg-surface-container-low transition-colors duration-200 cursor-pointer">
+<div>
+<h4 class="font-body-md text-body-md text-primary font-bold">Podcast Recording</h4>
+<p class="font-label-mono text-label-mono text-on-surface-variant mt-1">Monday · 10:00 AM</p>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">arrow_forward</span>
+</div>
+</section>
+<!-- Image Decoration / Inspiration Area (Optional for aesthetic) -->
+<div class="mt-8 border border-outline p-unit relative">
+<div class="absolute top-0 left-0 bg-primary text-on-primary font-label-mono text-label-mono text-[10px] px-1 m-1 z-10">REF</div>
+<img class="w-full h-32 object-cover filter grayscale contrast-125 border border-outline" data-alt="A detailed black and white high-contrast photograph of professional camera gear laid out neatly on a table top. The lighting is harsh and directional, emphasizing the textures of the lenses, metal bodies, and cables. The scene is shot from directly above in a 'knolling' style. The aesthetic is extremely utilitarian, clean, and organized, matching a minimalist, brutalist workspace vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_4koggaE4xwjSdD3CWiWu-0UT9Bb4zaQK56QFfc4MWL6UPtAMrM5d8ohnm7Qv0gcVJVj8TgIdXm7qMG0vsBslND_cguor0S2rcu2bemf-B1F9cN5RxmmHbSC_8dVt2Y0Hlimxwk4a0WD6VykJ4mJqlfDJH6SGRnO76T80dTn2f4WZxf4HQAjWAsMxa357yONRNrWxUn59VpFJI2qe6HNRqcko-WdyVNE2V6wmg9w1-Lq9IF_uLX_TSA"/>
+</div>
+</main>
+<!-- Floating Action Button for New Gig -->
+<div class="fixed bottom-24 right-margin-edge md:right-8 z-40">
+<button aria-label="New Gig" class="bg-primary text-on-primary w-14 h-14 rounded-none border border-primary flex items-center justify-center shadow-none hover:invert transition-all duration-100">
+<span class="material-symbols-outlined icon-fill">add</span>
+</button>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface dark:bg-surface fixed bottom-0 w-full z-50 border-t border-outline dark:border-outline-variant flat no shadows flex justify-around items-center h-16 px-margin-edge">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-container font-bold font-label-mono text-label-mono uppercase hover:opacity-100 active:invert transition-all duration-100" href="#">
+<span class="material-symbols-outlined mb-1 icon-fill">event_note</span>
+<span class="text-[10px]">Gigs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 font-label-mono text-label-mono uppercase hover:opacity-100 active:invert transition-all duration-100" href="#">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span class="text-[10px]">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 font-label-mono text-label-mono uppercase hover:opacity-100 active:invert transition-all duration-100" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="text-[10px]">Settings</span>
+</a>
+</nav>
+<!-- Desktop SideNav (Hidden on Mobile) -->
+<aside class="hidden md:flex flex-col h-full w-80 border-r border-outline dark:border-outline-variant p-margin-edge fixed top-14 left-0 bg-surface z-40">
+<h2 class="font-label-mono text-label-mono uppercase text-on-surface-variant mb-6 pb-2 border-b border-outline">KITLIST INDEX</h2>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 p-3 bg-primary dark:bg-primary-fixed text-on-primary dark:text-on-primary-fixed transition-all duration-75" href="#">
+<span class="material-symbols-outlined icon-fill">event_note</span>
+<span class="font-body-md text-body-md">Gigs</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-75" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md text-body-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-75" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Current Packs</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-75" href="#">
+<span class="material-symbols-outlined">list_alt</span>
+<span class="font-body-md text-body-md">Master List</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-outline">
+<a class="flex items-center gap-3 p-3 text-on-surface dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-primary-container transition-all duration-75" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Adjust main canvas margin for desktop -->
+<style>
+        @media (min-width: 768px) {
+            main {
+                margin-left: 20rem; /* w-80 */
+                max-width: calc(100% - 20rem);
+            }
+        }
+    </style>
+</body></html>

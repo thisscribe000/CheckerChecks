@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kitlist - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#c24100",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#c6c6c9",
+                        "surface-dim": "#d9dadb",
+                        "inverse-on-surface": "#f0f1f2",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#636467",
+                        "on-secondary-fixed-variant": "#454749",
+                        "primary-fixed": "#dde1ff",
+                        "tertiary-fixed": "#ffdbcf",
+                        "on-tertiary-fixed-variant": "#812800",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "on-background": "#191c1d",
+                        "primary-container": "#2e5bff",
+                        "on-primary-fixed-variant": "#0035be",
+                        "surface-tint": "#124af0",
+                        "surface-container": "#edeeef",
+                        "on-primary-container": "#efefff",
+                        "surface-bright": "#f8f9fa",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#380d00",
+                        "surface": "#f8f9fa",
+                        "background": "#f8f9fa",
+                        "secondary-fixed": "#e2e2e5",
+                        "on-primary-fixed": "#001356",
+                        "on-surface": "#191c1d",
+                        "tertiary": "#993100",
+                        "surface-container-low": "#f3f4f5",
+                        "outline": "#747688",
+                        "primary": "#0040e0",
+                        "secondary": "#5d5e61",
+                        "on-tertiary-container": "#ffece6",
+                        "outline-variant": "#c4c5d9",
+                        "on-secondary-fixed": "#1a1c1e",
+                        "tertiary-fixed-dim": "#ffb59b",
+                        "inverse-primary": "#b8c3ff",
+                        "primary-fixed-dim": "#b8c3ff",
+                        "on-surface-variant": "#434656",
+                        "surface-variant": "#e1e3e4",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2e3132",
+                        "secondary-container": "#e2e2e5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "margin-mobile": "16px",
+                        "unit": "8px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "stack-sm": "8px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "display": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Subtle shadow utilities based on design system */
+        .shadow-level-1 {
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04);
+        }
+        .shadow-level-2 {
+            box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-background text-primary font-headline-md top-0 w-full flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 sticky z-40">
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="A small circular profile avatar showing a smiling young professional in a modern, well-lit office setting. The lighting is bright and soft, fitting a modern corporate light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXjJ2j_DKOqAh_2r3t76jaiytbtKD_SPBXvZ7UQrc2PVxBLtzk0ql3Am-YpZrxdeR9NZuxwjL1X67YKjztEYMczkuPZgNgxfRR_-xTtaY_PMh5VlKk9_bAIBxA8e5GzCTcdsWU_pkbHEiB5TphKVWXjqt5ErLVI9_3B4zyTG2S8hOSLgK1_MiOEI5a5IUM6a6DDiaQzOPcj-EzESgfW2S7zbpXBdfGbmqd5HJWvbTJIvwR1rYQEjpBVw"/>
+<span class="font-headline-md font-bold text-primary tracking-tight">Kitlist</span>
+</div>
+<div>
+<button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-surface-container-low transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-stack-sm md:pt-stack-lg flex flex-col gap-stack-lg">
+<!-- Welcome Header -->
+<section>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-on-surface">Good morning, Alex.</h1>
+<p class="font-body-md text-on-surface-variant mt-1">Here is the status of your upcoming gear.</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Next Up Card (Takes full width on mobile, 8 cols on desktop) -->
+<section class="md:col-span-8 bg-surface-container-lowest rounded-[24px] shadow-level-1 p-6 md:p-8 flex flex-col gap-4 border border-outline-variant/30">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-sm text-primary uppercase tracking-wider mb-1 block">Next up</span>
+<h2 class="font-headline-md text-on-surface">Wedding Photography</h2>
+<p class="font-body-md text-on-surface-variant mt-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                            Tomorrow · 2:00 PM
+                        </p>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="camera" data-weight="fill">camera</span>
+</div>
+</div>
+<!-- Progress Section -->
+<div class="mt-4 bg-surface rounded-xl p-4 border border-outline-variant/30">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-on-surface">Packing Progress</span>
+<span class="font-label-md text-primary font-bold">14 / 18 packed</span>
+</div>
+<!-- Progress Bar -->
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500" style="width: 77%;"></div>
+</div>
+</div>
+<div class="mt-2">
+<button class="w-full md:w-auto px-6 py-3 bg-primary text-on-primary rounded-lg font-label-md hover:opacity-90 transition-opacity">
+                        Resume Packing
+                    </button>
+</div>
+</section>
+<!-- Quick Actions (Takes full width on mobile, 4 cols on desktop) -->
+<section class="md:col-span-4 flex flex-col gap-4">
+<div class="grid grid-cols-3 md:grid-cols-1 gap-4 h-full">
+<button class="bg-surface-container-lowest rounded-xl shadow-level-1 p-4 flex flex-col md:flex-row items-center md:items-start md:gap-4 border border-outline-variant/30 hover:bg-surface-container-low transition-colors group">
+<div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary mb-2 md:mb-0 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">add</span>
+</div>
+<div class="text-center md:text-left flex flex-col justify-center h-full">
+<span class="font-label-md text-on-surface">New Gig</span>
+</div>
+</button>
+<button class="bg-surface-container-lowest rounded-xl shadow-level-1 p-4 flex flex-col md:flex-row items-center md:items-start md:gap-4 border border-outline-variant/30 hover:bg-surface-container-low transition-colors group">
+<div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary mb-2 md:mb-0 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<div class="text-center md:text-left flex flex-col justify-center h-full">
+<span class="font-label-md text-on-surface">Inventory</span>
+</div>
+</button>
+<button class="bg-surface-container-lowest rounded-xl shadow-level-1 p-4 flex flex-col md:flex-row items-center md:items-start md:gap-4 border border-outline-variant/30 hover:bg-surface-container-low transition-colors group">
+<div class="w-10 h-10 rounded-full bg-surface flex items-center justify-center text-primary mb-2 md:mb-0 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined">file_copy</span>
+</div>
+<div class="text-center md:text-left flex flex-col justify-center h-full">
+<span class="font-label-md text-on-surface">Templates</span>
+</div>
+</button>
+</div>
+</section>
+</div>
+<!-- Recent Gigs -->
+<section class="mb-8">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-headline-md text-on-surface">Recent Gigs</h3>
+<button class="font-label-md text-primary hover:underline">View All</button>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Gig Card 1 -->
+<div class="bg-surface-container-lowest rounded-[16px] shadow-level-1 p-5 border border-outline-variant/30 flex justify-between items-center hover:shadow-level-2 transition-shadow cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">mic</span>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface font-bold text-base">Podcast Recording</h4>
+<p class="font-body-md text-on-surface-variant text-sm mt-0.5">Oct 12 · Studio A</p>
+</div>
+</div>
+<div class="px-3 py-1 bg-[#E8F5E9] text-[#2E7D32] rounded-md font-label-sm">
+                        Completed
+                    </div>
+</div>
+<!-- Gig Card 2 -->
+<div class="bg-surface-container-lowest rounded-[16px] shadow-level-1 p-5 border border-outline-variant/30 flex justify-between items-center hover:shadow-level-2 transition-shadow cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">live_tv</span>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface font-bold text-base">Church Livestream</h4>
+<p class="font-body-md text-on-surface-variant text-sm mt-0.5">Oct 15 · Main Sanctuary</p>
+</div>
+</div>
+<div class="px-3 py-1 bg-[#FFF3E0] text-[#E65100] rounded-md font-label-sm">
+                        Needs Packing
+                    </div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-20 bg-surface px-margin-mobile pb-safe rounded-t-xl border-t border-outline-variant shadow-md">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="home" data-weight="fill">home</span>
+<span class="font-label-sm mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-sm mt-1">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-label-sm mt-1">Gigs</span>
+</a>
+</nav>
+<!-- Desktop Side Navigation equivalent would go here in a real app, typically handled via a layout wrapper, but omitted here as requested design focuses on single page flow and specific BottomNav instructions -->
+</body></html>

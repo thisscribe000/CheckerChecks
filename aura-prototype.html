@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aura — AI FinTech Mobile UI Kit & Social Showcase</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            aura: {
+              bg: '#080B10',
+              surface: '#111622',
+              card: '#161E2E',
+              border: 'rgba(255, 255, 255, 0.08)',
+              mint: '#00F5A0',
+              cyan: '#00D8F6',
+              purple: '#8B5CF6',
+              textMuted: '#8E9AA8',
+            }
+          },
+          boxShadow: {
+            'glow-mint': '0 0 25px -5px rgba(0, 245, 160, 0.35)',
+            'glow-cyan': '0 0 25px -5px rgba(0, 216, 246, 0.35)',
+            'device': '0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 40px -10px rgba(0, 245, 160, 0.15)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #05070A;
+      color: #F3F4F6;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    .glass-panel {
+      background: rgba(22, 30, 46, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-panel-hover:hover {
+      border-color: rgba(0, 245, 160, 0.3);
+      box-shadow: 0 0 20px rgba(0, 245, 160, 0.12);
+    }
+    .glow-gradient-mint {
+      background: linear-gradient(135deg, #00F5A0 0%, #00D8F6 100%);
+    }
+    .glow-gradient-text {
+      background: linear-gradient(135deg, #00F5A0 0%, #00D8F6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .phone-frame {
+      width: 375px;
+      height: 760px;
+      border-radius: 48px;
+      border: 8px solid #202636;
+      background: #0B0E14;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 245, 160, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .phone-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 26px;
+      background: #111520;
+      border-radius: 20px;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Pulse animation for biometric */
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 0.3; }
+      100% { transform: scale(0.95); opacity: 0.8; }
+    }
+    .pulse-ring {
+      animation: pulseRing 3s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- Ambient Glowing Background Orbs -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="fixed top-1/3 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <!-- Header & Navigation -->
+  <header class="border-b border-white/10 glass-panel sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl glow-gradient-mint flex items-center justify-center text-black font-extrabold text-xl shadow-glow-mint">
+          A
+        </div>
+        <div>
+          <h1 class="font-bold text-lg text-white tracking-tight flex items-center gap-2">
+            AURA <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-aura-mint font-mono border border-aura-mint/30">AI Wealth OS</span>
+          </h1>
+          <p class="text-xs text-aura-textMuted">UI/UX Project Presentation & Content Kit</p>
+        </div>
+      </div>
+
+      <!-- View Switcher -->
+      <div class="flex bg-[#111622] p-1.5 rounded-xl border border-white/10 gap-1 text-sm font-medium">
+        <button onclick="switchView('screens')" id="tab-screens" class="px-4 py-2 rounded-lg bg-white/10 text-white transition flex items-center gap-2">
+          <i data-lucide="smartphone" class="w-4 h-4 text-aura-mint"></i> 3-Screen Mockup
+        </button>
+        <button onclick="switchView('carousel')" id="tab-carousel" class="px-4 py-2 rounded-lg text-aura-textMuted hover:text-white transition flex items-center gap-2">
+          <i data-lucide="layers" class="w-4 h-4"></i> Instagram Carousel
+        </button>
+        <button onclick="switchView('tokens')" id="tab-tokens" class="px-4 py-2 rounded-lg text-aura-textMuted hover:text-white transition flex items-center gap-2">
+          <i data-lucide="palette" class="w-4 h-4"></i> Design System Specs
+        </button>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="#social-copy" class="text-xs px-4 py-2 rounded-lg border border-aura-mint/40 text-aura-mint hover:bg-aura-mint hover:text-black font-semibold transition flex items-center gap-1.5">
+          <i data-lucide="copy" class="w-3.5 h-3.5"></i> Get Social Copy
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-10">
+
+    <!-- ================= VIEW 1: 3-SCREEN PROTOTYPE MOCKUP ================= -->
+    <section id="view-screens" class="space-y-8">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="text-3xl font-extrabold tracking-tight text-white">
+          The 3-Screen <span class="glow-gradient-text">Aura FinTech</span> Flow
+        </h2>
+        <p class="text-aura-textMuted text-sm">
+          Crafted for high visual impact on Instagram, Dribbble & Pinterest. Designed in a luxury dark aesthetic with intuitive AI insights and micro-interactions.
+        </p>
+      </div>
+
+      <!-- 3 Device Frames Grid -->
+      <div class="flex flex-wrap items-center justify-center gap-8 pt-4">
+
+        <!-- ================= PHONE 1: DASHBOARD ================= -->
+        <div class="phone-frame shadow-device">
+          <div class="phone-notch">
+            <span class="text-[10px] text-white/70 font-mono">9:41</span>
+            <div class="w-2.5 h-2.5 rounded-full bg-aura-mint/80 shadow-glow-mint"></div>
+          </div>
+
+          <!-- Phone Inner Content -->
+          <div class="p-5 pt-12 space-y-4 flex-1 overflow-y-auto hide-scrollbar">
+            
+            <!-- User Header -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full border border-aura-mint/40 p-0.5 glow-gradient-mint">
+                  <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-xs font-bold text-aura-mint">
+                    JD
+                  </div>
+                </div>
+                <div>
+                  <p class="text-[11px] text-aura-textMuted font-mono">Good evening</p>
+                  <h4 class="text-sm font-bold text-white">Julian Vance</h4>
+                </div>
+              </div>
+              <button class="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-white/80 hover:text-white border border-white/10">
+                <i data-lucide="bell" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <!-- Net Worth Hero Card -->
+            <div class="p-5 rounded-2xl bg-gradient-to-b from-[#182234] to-[#101622] border border-white/10 relative overflow-hidden space-y-3">
+              <div class="absolute -right-6 -top-6 w-24 h-24 bg-aura-mint/10 rounded-full blur-xl"></div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-aura-textMuted font-medium">Total Net Worth</span>
+                <span class="text-[11px] font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-aura-mint border border-aura-mint/30">
+                  +14.2% (\$10.4k)
+                </span>
+              </div>
+              <div>
+                <h3 class="text-3xl font-extrabold text-white tracking-tight font-mono">\$84,230.50</h3>
+              </div>
+
+              <!-- Mini Bezier Sparkline Chart (SVG) -->
+              <div class="pt-2">
+                <svg class="w-full h-14" viewBox="0 0 260 60" fill="none">
+                  <defs>
+                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#00F5A0" stop-opacity="0.35"/>
+                      <stop offset="100%" stop-color="#00F5A0" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M0 50 C 40 45, 60 25, 100 30 C 140 35, 180 10, 220 15 C 240 18, 255 5, 260 5 L 260 60 L 0 60 Z" fill="url(#chartGrad)" />
+                  <path d="M0 50 C 40 45, 60 25, 100 30 C 140 35, 180 10, 220 15 C 240 18, 255 5, 260 5" stroke="#00F5A0" stroke-width="2.5" stroke-linecap="round" />
+                  <circle cx="260" cy="5" r="4" fill="#00F5A0" class="shadow-glow-mint"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Quick Action Pills -->
+            <div class="grid grid-cols-3 gap-2">
+              <button class="p-2.5 rounded-xl glass-panel glass-panel-hover flex flex-col items-center gap-1.5 transition">
+                <div class="w-7 h-7 rounded-lg bg-emerald-500/20 text-aura-mint flex items-center justify-center">
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </div>
+                <span class="text-[11px] font-medium text-white">Deposit</span>
+              </button>
+              <button class="p-2.5 rounded-xl glass-panel glass-panel-hover flex flex-col items-center gap-1.5 transition">
+                <div class="w-7 h-7 rounded-lg bg-cyan-500/20 text-aura-cyan flex items-center justify-center">
+                  <i data-lucide="arrow-left-right" class="w-4 h-4"></i>
+                </div>
+                <span class="text-[11px] font-medium text-white">Transfer</span>
+              </button>
+              <button class="p-2.5 rounded-xl glass-panel glass-panel-hover flex flex-col items-center gap-1.5 transition">
+                <div class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center">
+                  <i data-lucide="sparkles" class="w-4 h-4"></i>
+                </div>
+                <span class="text-[11px] font-medium text-white">AI Allocate</span>
+              </button>
+            </div>
+
+            <!-- AI Intelligence Card (Bento Item) -->
+            <div class="p-4 rounded-2xl bg-[#131B2A] border border-aura-mint/30 relative space-y-2.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <i data-lucide="zap" class="w-3.5 h-3.5 text-aura-mint"></i>
+                  <span class="text-xs font-bold text-white uppercase tracking-wider font-mono">Aura AI Intel</span>
+                </div>
+                <span class="text-[10px] text-aura-mint font-mono bg-aura-mint/10 px-1.5 py-0.5 rounded">High Yield</span>
+              </div>
+              <p class="text-xs text-aura-textMuted leading-relaxed">
+                You have <span class="text-white font-semibold">\$1,200 idle cash</span> yielding 0.05%. Moving this to Treasury Yield earns +\$62/yr.
+              </p>
+              <button class="w-full py-2 px-3 rounded-lg glow-gradient-mint text-black font-bold text-xs shadow-glow-mint flex items-center justify-center gap-1.5 hover:opacity-90 transition">
+                Apply Rebalance <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+
+            <!-- Asset Holdings List -->
+            <div class="space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-white">Top Holdings</span>
+                <span class="text-aura-mint text-[11px] font-mono hover:underline cursor-pointer">View All</span>
+              </div>
+              <div class="p-3 rounded-xl glass-panel flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center font-mono">
+                    VOO
+                  </div>
+                  <div>
+                    <h5 class="text-xs font-bold text-white">Vanguard S&P 500</h5>
+                    <p class="text-[10px] text-aura-textMuted">14.2 Shares</p>
+                  </div>
+                </div>
+                <div class="text-right font-mono">
+                  <p class="text-xs font-bold text-white">\$6,790.44</p>
+                  <p class="text-[10px] text-aura-mint">+2.4%</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Nav Bar -->
+          <div class="h-16 border-t border-white/10 glass-panel px-6 flex items-center justify-between">
+            <button class="text-aura-mint flex flex-col items-center gap-0.5">
+              <i data-lucide="home" class="w-4 h-4"></i>
+              <span class="text-[9px] font-bold">Home</span>
+            </button>
+            <button class="text-aura-textMuted hover:text-white flex flex-col items-center gap-0.5">
+              <i data-lucide="pie-chart" class="w-4 h-4"></i>
+              <span class="text-[9px]">Portfolio</span>
+            </button>
+            <button class="w-9 h-9 rounded-full glow-gradient-mint flex items-center justify-center text-black shadow-glow-mint -mt-3">
+              <i data-lucide="scan" class="w-4 h-4 font-bold"></i>
+            </button>
+            <button class="text-aura-textMuted hover:text-white flex flex-col items-center gap-0.5">
+              <i data-lucide="trending-up" class="w-4 h-4"></i>
+              <span class="text-[9px]">Markets</span>
+            </button>
+            <button class="text-aura-textMuted hover:text-white flex flex-col items-center gap-0.5">
+              <i data-lucide="settings" class="w-4 h-4"></i>
+              <span class="text-[9px]">Settings</span>
+            </button>
+          </div>
+        </div>
+
+
+        <!-- ================= PHONE 2: ASSET DETAIL ================= -->
+        <div class="phone-frame shadow-device">
+          <div class="phone-notch">
+            <span class="text-[10px] text-white/70 font-mono">9:41</span>
+            <div class="w-2.5 h-2.5 rounded-full bg-aura-cyan/80 shadow-glow-cyan"></div>
+          </div>
+
+          <!-- Phone Inner Content -->
+          <div class="p-5 pt-12 space-y-4 flex-1 overflow-y-auto hide-scrollbar">
+            
+            <!-- Nav Header -->
+            <div class="flex items-center justify-between">
+              <button class="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-white/80 border border-white/10">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              </button>
+              <div class="text-center">
+                <h4 class="text-xs font-bold text-white">S&P 500 Index ETF</h4>
+                <p class="text-[10px] text-aura-textMuted font-mono">NYSE: VOO</p>
+              </div>
+              <button class="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-aura-mint border border-white/10">
+                <i data-lucide="star" class="w-4 h-4 fill-aura-mint"></i>
+              </button>
+            </div>
+
+            <!-- Price Hero -->
+            <div class="space-y-1">
+              <span class="text-xs text-aura-textMuted font-medium">Current Value</span>
+              <div class="flex items-baseline gap-3">
+                <h3 class="text-3xl font-extrabold text-white tracking-tight font-mono">\$478.20</h3>
+                <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-emerald-500/20 text-aura-mint border border-aura-mint/30">
+                  +\$12.80 (2.75%)
+                </span>
+              </div>
+            </div>
+
+            <!-- Full Interactive Chart Canvas -->
+            <div class="p-3 rounded-2xl bg-[#121824] border border-white/10 space-y-3">
+              <div class="h-36 relative">
+                <svg class="w-full h-full" viewBox="0 0 280 120" fill="none">
+                  <defs>
+                    <linearGradient id="chartGrad2" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#00D8F6" stop-opacity="0.4"/>
+                      <stop offset="100%" stop-color="#00D8F6" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M0 100 C 40 90, 80 40, 120 60 C 160 80, 200 20, 240 30 C 260 35, 275 10, 280 10 L 280 120 L 0 120 Z" fill="url(#chartGrad2)" />
+                  <path d="M0 100 C 40 90, 80 40, 120 60 C 160 80, 200 20, 240 30 C 260 35, 275 10, 280 10" stroke="#00D8F6" stroke-width="3" stroke-linecap="round" />
+                  <!-- Glowing active dot -->
+                  <circle cx="280" cy="10" r="5" fill="#00D8F6" class="shadow-glow-cyan"/>
+                </svg>
+              </div>
+
+              <!-- Time Range Pills -->
+              <div class="flex items-center justify-between bg-black/40 p-1 rounded-xl text-[11px] font-mono">
+                <span class="px-2.5 py-1 text-aura-textMuted hover:text-white cursor-pointer">1D</span>
+                <span class="px-2.5 py-1 text-aura-textMuted hover:text-white cursor-pointer">1W</span>
+                <span class="px-2.5 py-1 bg-white/10 text-white font-bold rounded-lg border border-white/20">1M</span>
+                <span class="px-2.5 py-1 text-aura-textMuted hover:text-white cursor-pointer">1Y</span>
+                <span class="px-2.5 py-1 text-aura-textMuted hover:text-white cursor-pointer">ALL</span>
+              </div>
+            </div>
+
+            <!-- Key Metrics Grid -->
+            <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+              <div class="p-3 rounded-xl glass-panel space-y-1">
+                <span class="text-[10px] text-aura-textMuted">52-WK HIGH</span>
+                <p class="font-bold text-white">\$492.10</p>
+              </div>
+              <div class="p-3 rounded-xl glass-panel space-y-1">
+                <span class="text-[10px] text-aura-textMuted">DIVIDEND YIELD</span>
+                <p class="font-bold text-aura-mint">1.54%</p>
+              </div>
+            </div>
+
+            <!-- AI Confidence Indicator -->
+            <div class="p-3 rounded-xl bg-purple-950/30 border border-purple-500/30 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="brain-circuit" class="w-4 h-4 text-purple-400"></i>
+                <span class="text-xs text-white font-medium">AI Sentiment Score</span>
+              </div>
+              <span class="text-xs font-bold text-purple-400 font-mono">92/100 (Strong Buy)</span>
+            </div>
+
+          </div>
+
+          <!-- Bottom Action Buttons -->
+          <div class="p-4 border-t border-white/10 glass-panel grid grid-cols-2 gap-3">
+            <button class="py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-xs hover:bg-white/10 transition">
+              Sell
+            </button>
+            <button class="py-3 rounded-xl glow-gradient-mint text-black font-bold text-xs shadow-glow-mint hover:opacity-90 transition">
+              Buy VOO
+            </button>
+          </div>
+        </div>
+
+
+        <!-- ================= PHONE 3: BIOMETRIC TRANSFER ================= -->
+        <div class="phone-frame shadow-device">
+          <div class="phone-notch">
+            <span class="text-[10px] text-white/70 font-mono">9:41</span>
+            <div class="w-2.5 h-2.5 rounded-full bg-purple-400/80"></div>
+          </div>
+
+          <!-- Phone Inner Content -->
+          <div class="p-5 pt-12 space-y-6 flex-1 flex flex-col justify-between overflow-y-auto hide-scrollbar text-center">
+            
+            <!-- Header -->
+            <div class="flex items-center justify-between">
+              <button class="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-white/80 border border-white/10">
+                <i data-lucide="x" class="w-4 h-4"></i>
+              </button>
+              <span class="text-xs font-bold text-white tracking-wide uppercase font-mono">Instant Transfer</span>
+              <div class="w-9"></div>
+            </div>
+
+            <!-- Transfer Amount -->
+            <div class="space-y-2">
+              <span class="text-xs text-aura-textMuted font-mono">Transfer Amount</span>
+              <h3 class="text-4xl font-extrabold text-white font-mono tracking-tight glow-gradient-text">\$1,200.00</h3>
+              <p class="text-[11px] text-aura-textMuted">From <span class="text-white font-semibold">Checking (*8921)</span> to <span class="text-aura-mint font-semibold">Treasury Vault (5.2% APY)</span></p>
+            </div>
+
+            <!-- FaceID Animated Scanner Visual -->
+            <div class="relative py-4 flex items-center justify-center">
+              <!-- Animated Glowing Rings -->
+              <div class="w-32 h-32 rounded-full border border-aura-mint/30 pulse-ring absolute"></div>
+              <div class="w-24 h-24 rounded-full border border-aura-cyan/40 pulse-ring absolute" style="animation-delay: 0.5s;"></div>
+              
+              <!-- Center Scanner Badge -->
+              <div class="w-20 h-20 rounded-2xl glass-panel border border-aura-mint flex items-center justify-center shadow-glow-mint relative z-10 bg-[#0E1522]">
+                <i data-lucide="scan-face" class="w-10 h-10 text-aura-mint"></i>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <p class="text-xs font-bold text-white flex items-center justify-center gap-1.5">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-aura-mint"></i> Zero-Knowledge Encryption Active
+              </p>
+              <p class="text-[10px] text-aura-textMuted">Authenticated via Secure Enclave Biometrics</p>
+            </div>
+
+            <!-- Slide to Confirm Gesture Button -->
+            <div class="p-1.5 rounded-2xl bg-[#121927] border border-aura-mint/40 relative flex items-center shadow-glow-mint">
+              <div class="w-11 h-11 rounded-xl glow-gradient-mint flex items-center justify-center text-black font-bold shadow-md cursor-pointer">
+                <i data-lucide="chevrons-right" class="w-5 h-5"></i>
+              </div>
+              <span class="text-xs font-bold text-aura-mint flex-1 text-center font-mono tracking-wider">
+                SLIDE TO CONFIRM
+              </span>
+            </div>
+
+          </div>
+
+          <!-- Bottom Safe Area Indicator -->
+          <div class="h-6 flex items-center justify-center">
+            <div class="w-28 h-1 rounded-full bg-white/20"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ================= VIEW 2: INSTAGRAM CAROUSEL PREVIEWER ================= -->
+    <section id="view-carousel" class="hidden space-y-8">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="text-3xl font-extrabold tracking-tight text-white">
+          Instagram Carousel <span class="glow-gradient-text">Slide Architecture</span>
+        </h2>
+        <p class="text-aura-textMuted text-sm">
+          5-Slide high-save formula. Designed to hook users with bold questions, educate with UI breakdowns, and end with a subtle inbound client CTA.
+        </p>
+      </div>
+
+      <!-- Slide Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        
+        <!-- Slide 1 -->
+        <div class="aspect-[4/5] p-5 rounded-2xl bg-gradient-to-b from-[#151D2C] to-[#0A0D14] border border-aura-mint/40 flex flex-col justify-between shadow-glow-mint">
+          <div class="flex items-center justify-between text-[10px] font-mono text-aura-mint">
+            <span>SLIDE 01</span>
+            <span>THE HOOK</span>
+          </div>
+          <div class="space-y-2 text-center">
+            <div class="w-12 h-12 rounded-xl glow-gradient-mint mx-auto flex items-center justify-center text-black font-bold">
+              <i data-lucide="sparkles" class="w-6 h-6"></i>
+            </div>
+            <h3 class="text-sm font-extrabold text-white">Why 90% of banking apps feel like spreadsheet software</h3>
+            <p class="text-[10px] text-aura-textMuted">And how we redesigned it into an AI Wealth OS in 3 screens 🚀</p>
+          </div>
+          <div class="text-[10px] text-center text-white/50 font-mono">Swipe to see the fix →</div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="aspect-[4/5] p-5 rounded-2xl glass-panel flex flex-col justify-between">
+          <div class="flex items-center justify-between text-[10px] font-mono text-aura-textMuted">
+            <span>SLIDE 02</span>
+            <span>THE PROBLEM</span>
+          </div>
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-red-400">❌ The Friction:</h4>
+            <p class="text-[11px] text-aura-textMuted leading-snug">
+              Traditional banking apps hide high-yield actions behind 10 menus. Users suffer from cognitive fatigue and idle cash loss.
+            </p>
+          </div>
+          <div class="p-2 rounded-lg bg-red-500/10 border border-red-500/20 text-[10px] text-red-300 text-center font-mono">
+            Drop-off rate: 64%
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="aspect-[4/5] p-5 rounded-2xl glass-panel flex flex-col justify-between">
+          <div class="flex items-center justify-between text-[10px] font-mono text-aura-cyan">
+            <span>SLIDE 03</span>
+            <span>THE HERO SCREEN</span>
+          </div>
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-aura-cyan">✨ Bento Net Worth</h4>
+            <p class="text-[11px] text-aura-textMuted leading-snug">
+              Instant 1-second financial clarity. High-contrast neon green for positive yield and an autonomous AI recommendation engine.
+            </p>
+          </div>
+          <div class="text-[10px] text-center text-white/50 font-mono">Zoomed Screen 1 View</div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="aspect-[4/5] p-5 rounded-2xl glass-panel flex flex-col justify-between">
+          <div class="flex items-center justify-between text-[10px] font-mono text-purple-400">
+            <span>SLIDE 04</span>
+            <span>MICRO-UX</span>
+          </div>
+          <div class="space-y-2">
+            <h4 class="text-xs font-bold text-purple-400">⚡ Biometric Slide</h4>
+            <p class="text-[11px] text-aura-textMuted leading-snug">
+              Replaced boring SMS OTP authentication with seamless FaceID + Swipe-to-confirm tactile feedback gesture.
+            </p>
+          </div>
+          <div class="text-[10px] text-center text-white/50 font-mono">Zero-friction transfer</div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="aspect-[4/5] p-5 rounded-2xl bg-gradient-to-b from-[#182338] to-[#0D121D] border border-white/20 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-[10px] font-mono text-aura-mint">
+            <span>SLIDE 05</span>
+            <span>STEALTH CTA</span>
+          </div>
+          <div class="space-y-2 text-center">
+            <h4 class="text-xs font-bold text-white">Building a Fintech, SaaS or AI Product?</h4>
+            <p class="text-[10px] text-aura-textMuted">
+              Comment <span class="text-aura-mint font-bold font-mono">"AURA"</span> to get the free Figma file or tap the link in my bio to collaborate.
+            </p>
+          </div>
+          <div class="py-1.5 rounded-lg glow-gradient-mint text-black font-bold text-[10px] text-center">
+            Save & Share 🔖
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ================= VIEW 3: DESIGN SYSTEM TOKENS ================= -->
+    <section id="view-tokens" class="hidden space-y-8">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <h2 class="text-3xl font-extrabold tracking-tight text-white">
+          Aura <span class="glow-gradient-text">Design System Tokens</span>
+        </h2>
+        <p class="text-aura-textMuted text-sm">
+          Everything you need to replicate this in Figma or code with exact pixel-perfect specifications.
+        </p>
+      </div>
+
+      <!-- Colors Grid -->
+      <div class="space-y-4">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono">1. Color Palette Tokens</h3>
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 font-mono text-xs">
+          
+          <div class="p-4 rounded-xl border border-white/10 space-y-2" style="background-color: #0B0E14;">
+            <div class="h-8 rounded bg-[#0B0E14] border border-white/20"></div>
+            <p class="font-bold text-white">Background</p>
+            <p class="text-aura-textMuted text-[11px]">#0B0E14</p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-white/10 space-y-2" style="background-color: #161E2E;">
+            <div class="h-8 rounded bg-[#161E2E] border border-white/20"></div>
+            <p class="font-bold text-white">Card Surface</p>
+            <p class="text-aura-textMuted text-[11px]">#161E2E</p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-white/10 space-y-2 bg-[#101724]">
+            <div class="h-8 rounded bg-[#00F5A0] shadow-glow-mint"></div>
+            <p class="font-bold text-white">Neon Mint</p>
+            <p class="text-aura-mint text-[11px]">#00F5A0</p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-white/10 space-y-2 bg-[#101724]">
+            <div class="h-8 rounded bg-[#00D8F6] shadow-glow-cyan"></div>
+            <p class="font-bold text-white">Electric Cyan</p>
+            <p class="text-aura-cyan text-[11px]">#00D8F6</p>
+          </div>
+
+          <div class="p-4 rounded-xl border border-white/10 space-y-2 bg-[#101724]">
+            <div class="h-8 rounded bg-[#8E9AA8]"></div>
+            <p class="font-bold text-white">Text Muted</p>
+            <p class="text-aura-textMuted text-[11px]">#8E9AA8</p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Typography Specs -->
+      <div class="space-y-4">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider font-mono">2. Typography Scale</h3>
+        <div class="p-6 rounded-2xl glass-panel space-y-4">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div>
+              <span class="text-xs text-aura-textMuted font-mono">Display Hero (32px Bold / ExtraBold)</span>
+              <p class="text-2xl font-extrabold text-white font-mono">\$84,230.50</p>
+            </div>
+            <span class="text-xs text-aura-mint font-mono">Font: Plus Jakarta Sans / JetBrains Mono</span>
+          </div>
+
+          <div class="flex items-center justify-between border-b border-white/10 pb-3">
+            <div>
+              <span class="text-xs text-aura-textMuted font-mono">Card Title & Primary Buttons (14px Bold)</span>
+              <p class="text-sm font-bold text-white">Apply AI Portfolio Rebalance</p>
+            </div>
+            <span class="text-xs text-aura-textMuted font-mono">Weight: 700 / 600</span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-xs text-aura-textMuted font-mono">Micro-Labels & Badge Tags (11px Medium)</span>
+              <p class="text-xs text-aura-textMuted font-mono">+14.2% (\$10.4k this month)</p>
+            </div>
+            <span class="text-xs text-aura-textMuted font-mono">Letter Spacing: +0.02em</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ================= SOCIAL COPY & CAPTION ACCORDION ================= -->
+    <section id="social-copy" class="mt-16 pt-10 border-t border-white/10 space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-xl font-bold text-white">Ready-to-Post Captions & Hashtags</h3>
+          <p class="text-xs text-aura-textMuted">Copy-paste these directly when posting your carousel or Dribbble shot.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Instagram Caption -->
+        <div class="p-5 rounded-2xl glass-panel space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-aura-mint font-mono flex items-center gap-1.5">
+              <i data-lucide="instagram" class="w-4 h-4"></i> Instagram Caption
+            </span>
+            <button onclick="copyToClipboard('ig-caption')" class="text-xs px-2.5 py-1 rounded bg-white/10 text-white hover:bg-white/20 transition">Copy</button>
+          </div>
+          <textarea id="ig-caption" class="w-full h-44 bg-black/40 p-3 rounded-xl text-xs text-white/90 font-mono resize-none border border-white/10 focus:outline-none" readonly>Most banking apps make you feel like you’re doing your taxes.
+
+So I redesigned the mobile wealth experience from scratch: Aura AI. 🚀
+
+Here’s what I changed:
+1️⃣ 1-Second Net Worth Clarity (Bento Grid)
+2️⃣ Autonomous AI yield optimization
+3️⃣ Zero-friction biometric slide authorization
+
+Drop a comment with "AURA" and I’ll DM you the breakdown link!
+
+Need a high-converting UI/UX redesign for your SaaS or app? Check the link in my bio. 📩
+
+#uidesign #uxdesign #figma #appdesign #fintech #dailyui #webdesign #uiuxdesigner #productdesign #dashboardui</textarea>
+        </div>
+
+        <!-- Dribbble / Pinterest Copy -->
+        <div class="p-5 rounded-2xl glass-panel space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-aura-cyan font-mono flex items-center gap-1.5">
+              <i data-lucide="dribbble" class="w-4 h-4"></i> Dribbble & Pinterest Copy
+            </span>
+            <button onclick="copyToClipboard('dribbble-caption')" class="text-xs px-2.5 py-1 rounded bg-white/10 text-white hover:bg-white/20 transition">Copy</button>
+          </div>
+          <textarea id="dribbble-caption" class="w-full h-44 bg-black/40 p-3 rounded-xl text-xs text-white/90 font-mono resize-none border border-white/10 focus:outline-none" readonly>Aura — Autonomous AI Wealth & Asset Management UI
+
+A sleek dark-mode mobile banking and investment application designed with micro-interactions, bento-grid net worth analytics, and biometric FaceID execution.
+
+Designed in Figma.
+Available for new product design & UI/UX partnerships.
+
+Tags: Fintech, Mobile App, UI Design, Dark Mode, Figma, Dashboard, Crypto, Investing, UX Case Study</textarea>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    function switchView(tab) {
+      document.getElementById('view-screens').classList.add('hidden');
+      document.getElementById('view-carousel').classList.add('hidden');
+      document.getElementById('view-tokens').classList.add('hidden');
+
+      document.getElementById('tab-screens').className = 'px-4 py-2 rounded-lg text-aura-textMuted hover:text-white transition flex items-center gap-2';
+      document.getElementById('tab-carousel').className = 'px-4 py-2 rounded-lg text-aura-textMuted hover:text-white transition flex items-center gap-2';
+      document.getElementById('tab-tokens').className = 'px-4 py-2 rounded-lg text-aura-textMuted hover:text-white transition flex items-center gap-2';
+
+      if (tab === 'screens') {
+        document.getElementById('view-screens').classList.remove('hidden');
+        document.getElementById('tab-screens').className = 'px-4 py-2 rounded-lg bg-white/10 text-white transition flex items-center gap-2';
+      } else if (tab === 'carousel') {
+        document.getElementById('view-carousel').classList.remove('hidden');
+        document.getElementById('tab-carousel').className = 'px-4 py-2 rounded-lg bg-white/10 text-white transition flex items-center gap-2';
+      } else if (tab === 'tokens') {
+        document.getElementById('view-tokens').classList.remove('hidden');
+        document.getElementById('tab-tokens').className = 'px-4 py-2 rounded-lg bg-white/10 text-white transition flex items-center gap-2';
+      }
+      lucide.createIcons();
+    }
+
+    function copyToClipboard(id) {
+      const copyText = document.getElementById(id);
+      copyText.select();
+      navigator.clipboard.writeText(copyText.value);
+      alert('Copied to clipboard!');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kitlist - Wedding Shoot Checklist</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#783200",
+                      "inverse-on-surface": "#f3f0ef",
+                      "surface-container-highest": "#e5e2e1",
+                      "surface-tint": "#0053db",
+                      "on-error": "#ffffff",
+                      "primary": "#004ac6",
+                      "surface-variant": "#e5e2e1",
+                      "tertiary-container": "#bc4800",
+                      "error": "#ba1a1a",
+                      "on-surface-variant": "#434655",
+                      "secondary-container": "#fd761a",
+                      "surface-container-high": "#eae7e7",
+                      "background": "#fcf9f8",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "outline-variant": "#c3c6d7",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed": "#00174b",
+                      "secondary-fixed-dim": "#ffb690",
+                      "outline": "#737686",
+                      "surface-container-lowest": "#ffffff",
+                      "on-secondary-container": "#5c2400",
+                      "on-tertiary-fixed": "#360f00",
+                      "inverse-surface": "#313030",
+                      "background-warm": "#FAF9F6",
+                      "surface-container-low": "#f6f3f2",
+                      "stroke-subtle": "#E5E4E1",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "on-tertiary-container": "#ffede6",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "tertiary": "#943700",
+                      "surface-container": "#f0eded",
+                      "on-secondary": "#ffffff",
+                      "secondary": "#9d4300",
+                      "on-secondary-fixed": "#341100",
+                      "surface": "#fcf9f8",
+                      "on-primary": "#ffffff",
+                      "primary-container": "#2563eb",
+                      "on-primary-container": "#eeefff",
+                      "secondary-fixed": "#ffdbca",
+                      "surface-bright": "#fcf9f8",
+                      "on-surface": "#1c1b1b",
+                      "tertiary-fixed": "#ffdbcd",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-dim": "#dcd9d9",
+                      "primary-fixed": "#dbe1ff",
+                      "on-background": "#1c1b1b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "container-margin": "24px",
+                      "section-gap": "48px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "label-bold": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.03em", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-bold": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0", "fontWeight": "400"}],
+                      "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Checkbox Styles */
+        .pack-checkbox:checked + div {
+            background-color: theme('colors.primary-container');
+            border-color: theme('colors.primary-container');
+        }
+        .pack-checkbox:checked + div span {
+            opacity: 1;
+        }
+        .pack-checkbox:not(:checked) + div {
+            background-color: transparent;
+            border-color: theme('colors.outline');
+        }
+        .pack-checkbox:not(:checked) + div span {
+            opacity: 0;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-warm text-on-background min-h-screen flex flex-col md:max-w-[1440px] md:mx-auto">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background w-full top-0 sticky z-40 border-b border-stroke-subtle flex justify-between items-center px-container-margin py-unit transition-colors duration-200">
+<div class="flex items-center gap-4">
+<button aria-label="Menu" class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-display text-headline-md-mobile md:text-headline-md tracking-tighter text-on-background">KITLIST</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-stroke-subtle">
+<img alt="User profile photo" class="object-cover w-full h-full" data-alt="A close up professional headshot of a person, well lit with a clean bright background, suitable for a minimalist user profile avatar in a high end professional app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbPMY7meQkjYWYA7h8_SN2HJfWhU1VZO3BtlFdKtEVEZ2bh5whe_rIU_uSVxRSSy8NF9F8AVn6Y5ecGmUtDdUyqPACgogps_vmRzkVN7iB0FPkroEZwzoIA3bUkgZOMk4idY-G47BONEOK-EFVFvzt2Ny1YMwJ-HJLIrwsKwn6HaaSIKzokUnn67kNsW7SUX5RX7q0yt2DofUrM0HoNH_Jgh3zLUoJetn6HrSM4D2yXnVVYBwlxwt2eA"/>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow px-container-margin py-section-gap pb-32 md:pb-section-gap">
+<!-- Header & Progress -->
+<div class="mb-12 max-w-3xl mx-auto">
+<div class="flex justify-between items-end mb-6 border-b border-stroke-subtle pb-4">
+<div>
+<span class="font-label-caps text-label-caps text-primary uppercase block mb-2 tracking-widest">Upcoming Event</span>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Wedding Shoot</h2>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-on-surface block">14 / 18</span>
+<span class="font-label-bold text-label-bold text-on-surface-variant">packed</span>
+</div>
+</div>
+<!-- Linear Progress Graphic -->
+<div class="w-full bg-surface-container-high rounded-full h-2 mb-2 overflow-hidden relative">
+<div class="bg-primary-container h-2 rounded-full absolute top-0 left-0 transition-all duration-500 ease-in-out" style="width: 77%;"></div>
+</div>
+</div>
+<!-- Checklist Content -->
+<div class="max-w-3xl mx-auto space-y-12">
+<!-- Section: CAMERA -->
+<section>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-on-surface-variant">photo_camera</span>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">CAMERA</h3>
+<div class="flex-grow h-px bg-stroke-subtle"></div>
+</div>
+<div class="grid gap-3">
+<!-- Item 1: Checked -->
+<label class="flex items-center p-4 bg-surface-container-lowest border border-stroke-subtle rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group">
+<input checked="" class="pack-checkbox hidden" type="checkbox"/>
+<div class="w-6 h-6 rounded border-2 mr-4 flex items-center justify-center transition-colors shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] icon-fill transition-opacity">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface line-through opacity-70">Camera body</span>
+</label>
+<!-- Item 2: Checked -->
+<label class="flex items-center p-4 bg-surface-container-lowest border border-stroke-subtle rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group">
+<input checked="" class="pack-checkbox hidden" type="checkbox"/>
+<div class="w-6 h-6 rounded border-2 mr-4 flex items-center justify-center transition-colors shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] icon-fill transition-opacity">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface line-through opacity-70">24–70mm lens</span>
+</label>
+<!-- Item 3: Checked -->
+<label class="flex items-center p-4 bg-surface-container-lowest border border-stroke-subtle rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group">
+<input checked="" class="pack-checkbox hidden" type="checkbox"/>
+<div class="w-6 h-6 rounded border-2 mr-4 flex items-center justify-center transition-colors shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] icon-fill transition-opacity">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface line-through opacity-70">Tripod</span>
+</label>
+<!-- Item 4: Unchecked -->
+<label class="flex items-center p-4 bg-surface-container-lowest border border-primary-container rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+<input class="pack-checkbox hidden" type="checkbox"/>
+<div class="w-6 h-6 rounded border-2 mr-4 flex items-center justify-center transition-colors shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] icon-fill transition-opacity">check</span>
+</div>
+<span class="font-label-bold text-label-bold text-on-surface flex-grow">Extra battery</span>
+<span class="material-symbols-outlined text-primary-container ml-2 text-sm" title="Missing Item">warning</span>
+</label>
+</div>
+</section>
+<!-- Section: AUDIO -->
+<section>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-on-surface-variant">mic</span>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">AUDIO</h3>
+<div class="flex-grow h-px bg-stroke-subtle"></div>
+</div>
+<div class="grid gap-3">
+<!-- Item 1: Checked -->
+<label class="flex items-center p-4 bg-surface-container-lowest border border-stroke-subtle rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group">
+<input checked="" class="pack-checkbox hidden" type="checkbox"/>
+<div class="w-6 h-6 rounded border-2 mr-4 flex items-center justify-center transition-colors shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] icon-fill transition-opacity">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface line-through opacity-70">Wireless mic</span>
+</label>
+<!-- Item 2: Unchecked -->
+<label class="flex items-center p-4 bg-surface-container-lowest border border-primary-container rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+<input class="pack-checkbox hidden" type="checkbox"/>
+<div class="w-6 h-6 rounded border-2 mr-4 flex items-center justify-center transition-colors shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] icon-fill transition-opacity">check</span>
+</div>
+<span class="font-label-bold text-label-bold text-on-surface flex-grow">Audio recorder</span>
+<span class="material-symbols-outlined text-primary-container ml-2 text-sm" title="Missing Item">warning</span>
+</label>
+</div>
+</section>
+<!-- Section: POWER -->
+<section>
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-on-surface-variant">power</span>
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">POWER</h3>
+<div class="flex-grow h-px bg-stroke-subtle"></div>
+</div>
+<div class="grid gap-3">
+<!-- Item 1: Checked -->
+<label class="flex items-center p-4 bg-surface-container-lowest border border-stroke-subtle rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group">
+<input checked="" class="pack-checkbox hidden" type="checkbox"/>
+<div class="w-6 h-6 rounded border-2 mr-4 flex items-center justify-center transition-colors shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] icon-fill transition-opacity">check</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface line-through opacity-70">Charger</span>
+</label>
+<!-- Item 2: Unchecked -->
+<label class="flex items-center p-4 bg-surface-container-lowest border border-primary-container rounded-lg cursor-pointer hover:bg-surface-container-low transition-colors group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary-container"></div>
+<input class="pack-checkbox hidden" type="checkbox"/>
+<div class="w-6 h-6 rounded border-2 mr-4 flex items-center justify-center transition-colors shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] icon-fill transition-opacity">check</span>
+</div>
+<span class="font-label-bold text-label-bold text-on-surface flex-grow">Extension cable</span>
+<span class="material-symbols-outlined text-primary-container ml-2 text-sm" title="Missing Item">warning</span>
+</label>
+</div>
+</section>
+</div>
+</main>
+<!-- Contextual Footer Action (Not part of global shell) -->
+<div class="fixed bottom-16 md:bottom-0 left-0 w-full bg-background-warm/90 backdrop-blur-md border-t border-stroke-subtle p-container-margin z-30">
+<div class="max-w-3xl mx-auto flex items-center justify-between">
+<span class="font-headline-md text-headline-md text-on-surface tracking-tight">4 things left</span>
+<button class="bg-primary-container hover:bg-primary-fixed-variant text-on-primary-container font-label-bold text-label-bold py-3 px-8 rounded-lg transition-colors duration-200">
+                Finish Packing
+            </button>
+</div>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container-lowest dark:bg-surface-container-lowest fixed bottom-0 w-full z-50 flex justify-around items-center h-16 bg-white dark:bg-surface border-t border-stroke-subtle">
+<a class="flex flex-col items-center justify-center text-on-surface-variant font-label-bold hover:text-primary active:scale-95 transition-transform w-full py-2" href="#">
+<span class="material-symbols-outlined mb-1">event_note</span>
+<span class="font-label-caps text-[10px]">Gigs</span>
+</a>
+<!-- Inventory matches intent of checklist -->
+<a class="flex flex-col items-center justify-center text-primary font-label-bold active:scale-95 transition-transform w-full py-2 relative" href="#">
+<div class="absolute -top-1 w-10 h-1 bg-primary rounded-b-full"></div>
+<span class="material-symbols-outlined mb-1 icon-fill">inventory_2</span>
+<span class="font-label-caps text-[10px]">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant font-label-bold hover:text-primary active:scale-95 transition-transform w-full py-2" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-label-caps text-[10px]">Settings</span>
+</a>
+</nav>
+<script>
+        // Simple script to toggle line-through on click for visual feedback
+        document.querySelectorAll('.pack-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const label = e.target.closest('label');
+                const textSpan = label.querySelector('span:not(.material-symbols-outlined)');
+                const warningIcon = label.querySelector('span[title="Missing Item"]');
+                
+                if (e.target.checked) {
+                    textSpan.classList.add('line-through', 'opacity-70', 'font-body-md');
+                    textSpan.classList.remove('font-label-bold');
+                    label.classList.remove('border-primary-container');
+                    label.classList.add('border-stroke-subtle');
+                    if(warningIcon) warningIcon.style.display = 'none';
+                    const indicator = label.querySelector('.absolute');
+                    if(indicator) indicator.style.display = 'none';
+                } else {
+                    textSpan.classList.remove('line-through', 'opacity-70', 'font-body-md');
+                    textSpan.classList.add('font-label-bold');
+                    label.classList.add('border-primary-container');
+                    label.classList.remove('border-stroke-subtle');
+                    if(warningIcon) warningIcon.style.display = 'block';
+                    const indicator = label.querySelector('.absolute');
+                    if(indicator) indicator.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body></html>

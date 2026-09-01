@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kitlist - Home</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#000000",
+                        "on-primary-container": "#858383",
+                        "primary-fixed": "#e5e2e1",
+                        "on-tertiary-container": "#868381",
+                        "surface": "#f9f9f9",
+                        "on-surface-variant": "#444748",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#dadada",
+                        "tertiary-fixed-dim": "#cac6c3",
+                        "outline-variant": "#c4c7c7",
+                        "on-tertiary-fixed": "#1c1b1a",
+                        "primary-container": "#1c1b1b",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-error": "#ffffff",
+                        "tertiary": "#000000",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#1c1b1b",
+                        "surface-bright": "#f9f9f9",
+                        "background": "#f9f9f9",
+                        "tertiary-fixed": "#e6e1df",
+                        "on-primary-fixed-variant": "#474646",
+                        "surface-tint": "#5f5e5e",
+                        "surface-container": "#eeeeee",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "secondary-fixed": "#e4e2e2",
+                        "surface-variant": "#e2e2e2",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-container": "#626262",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-surface": "#1a1c1c",
+                        "on-background": "#1a1c1c",
+                        "inverse-surface": "#2f3131",
+                        "on-tertiary-fixed-variant": "#484645",
+                        "outline": "#747878",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "secondary": "#5e5e5e",
+                        "surface-container-low": "#f3f3f3",
+                        "inverse-primary": "#c8c6c5",
+                        "secondary-container": "#e1dfdf",
+                        "tertiary-container": "#1c1b1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xl": "40px",
+                        "md": "16px",
+                        "margin-desktop": "48px",
+                        "xs": "4px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "lg": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "display": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "mono-sm": ["monospace"],
+                        "headline-lg": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0", "fontWeight": "400" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "mono-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0", "fontWeight": "400" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9f9f9; /* background */
+            color: #1a1c1c; /* on-background */
+        }
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+        }
+        /* Utility for 1px border cards/buttons per style guidance */
+        .u-border {
+            border: 1px solid #E5E5E5;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen pt-16 pb-[80px]">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 bg-surface border-b border-outline-variant transition-transform duration-100">
+<button aria-label="Menu" class="hover:opacity-80 transition-opacity flex items-center justify-center p-2 rounded-full">
+<span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+</button>
+<div class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary">KITLIST</div>
+<button aria-label="Profile" class="hover:opacity-80 transition-opacity flex items-center justify-center w-8 h-8 bg-surface-variant rounded-full text-primary font-label-caps text-label-caps overflow-hidden u-border">
+<!-- Placeholder Avatar -->
+<img class="w-full h-full object-cover" data-alt="A minimalist black and white headshot portrait of a professional creative looking directly at the camera. The lighting is high key and stark, emphasizing structural features. The background is pure white. The image exudes calm preparedness and disciplined focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaGAMfETXrPrwrhzXxWl2Uo8iw9dEsobNEtSu3tGY8PICFMRqTLTQndVGA9sjW8xLEyWv6_rRQANSRZyst3XRJ5R31EAawgq9gEXmcxEiyalMMYqH7YpbNOneoPtAZEzRwsij0OdNrwIo_NZnX5jI7GTa3obFRknJKjE0ysVkOZUXLUAQB6EX_SToWHJo9MhWLRTkoXwN5oh7rbjY_Ep5m7BJvPqvAzzsp2L_pST0DqO5gJWL33lijoA"/>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-[1280px] mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:justify-between md:items-end gap-md mb-xl">
+<div>
+<h1 class="font-display text-display text-primary mb-xs">Good morning, Alex.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Here is your schedule and prep status.</p>
+</div>
+<button class="bg-primary text-on-primary font-body-md text-body-md px-lg py-md rounded hover:bg-inverse-surface transition-colors flex items-center justify-center gap-xs">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'FILL' 0;">add</span>
+                New Gig
+            </button>
+</div>
+<!-- Upcoming Gigs Section -->
+<section>
+<h2 class="font-headline-md text-headline-md text-primary mb-md">Upcoming Gigs</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest u-border rounded p-md hover:border-primary transition-colors flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md text-primary">Wedding Shoot</h3>
+<div class="bg-[#F0F0F0] px-sm py-xs rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+<span class="font-label-caps text-label-caps text-primary">IN PREP</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_month">calendar_month</span>
+                            Saturday, Oct 12
+                        </p>
+</div>
+<div class="mt-lg">
+<div class="flex justify-between font-mono-sm text-mono-sm text-on-surface-variant mb-xs">
+<span>Progress</span>
+<span class="font-bold text-primary">12 / 18 packed</span>
+</div>
+<div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 66%;"></div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest u-border rounded p-md hover:border-primary transition-colors flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md text-primary">Podcast Recording</h3>
+<div class="bg-[#F0F0F0] px-sm py-xs rounded flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+<span class="font-label-caps text-label-caps text-primary">IN PREP</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_month">calendar_month</span>
+                            Monday, Oct 14
+                        </p>
+</div>
+<div class="mt-lg">
+<div class="flex justify-between font-mono-sm text-mono-sm text-on-surface-variant mb-xs">
+<span>Progress</span>
+<span class="font-bold text-primary">5 / 8 packed</span>
+</div>
+<div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 62.5%;"></div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest u-border rounded p-md hover:border-primary transition-colors flex flex-col justify-between min-h-[160px]">
+<div>
+<div class="flex justify-between items-start mb-sm">
+<h3 class="font-headline-md text-headline-md text-primary">Church Livestream</h3>
+<div class="bg-[#F0F0F0] px-sm py-xs rounded flex items-center gap-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant">NOT STARTED</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_month">calendar_month</span>
+                            Sunday, Oct 20
+                        </p>
+</div>
+<div class="mt-lg">
+<div class="flex justify-between font-mono-sm text-mono-sm text-on-surface-variant mb-xs">
+<span>Progress</span>
+<span class="font-bold text-primary">0 / 15 packed</span>
+</div>
+<div class="w-full h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only shell anchor) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe bg-surface border-t border-outline-variant md:hidden">
+<!-- Active: Gigs -->
+<a aria-label="Gigs" class="flex flex-col items-center justify-center text-primary border-t-2 border-primary pt-2 hover:opacity-80 transition-opacity w-full max-w-[80px]" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="event_note" style="font-variation-settings: 'FILL' 1;">event_note</span>
+<span class="font-label-caps text-label-caps">Gigs</span>
+</a>
+<!-- Inactive: Inventory -->
+<a aria-label="Inventory" class="flex flex-col items-center justify-center text-on-surface-variant pt-2 hover:text-primary transition-colors w-full max-w-[80px]" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="inventory_2" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+<span class="font-label-caps text-label-caps">Inventory</span>
+</a>
+<!-- Inactive: Settings -->
+<a aria-label="Settings" class="flex flex-col items-center justify-center text-on-surface-variant pt-2 hover:text-primary transition-colors w-full max-w-[80px]" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="settings" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+</nav>
+<!-- Desktop Nav Cluster (Injected into TopAppBar via styling logic typically, but keeping structural separation clear for semantic shell) -->
+<div class="hidden md:flex fixed top-0 right-margin-desktop h-16 items-center gap-lg z-[51]">
+<a class="font-label-caps text-label-caps text-primary border-b-2 border-primary h-full flex items-center hover:opacity-80 transition-opacity" href="#">Gigs</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant h-full flex items-center hover:text-primary transition-colors" href="#">Inventory</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant h-full flex items-center hover:text-primary transition-colors" href="#">Settings</a>
+</div>
+</body></html>

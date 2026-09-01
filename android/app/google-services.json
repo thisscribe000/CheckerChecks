@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "638038628767",
+    "project_id": "checkerchecks-web-app",
+    "storage_bucket": "checkerchecks-web-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638038628767:android:7cc84b6c3a3e84e58505aa",
+        "android_client_info": {
+          "package_name": "com.checkerchecks.checkerchecks"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqmxYvSA_pKvNzbCP2NFmtmUI4anWAjOs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

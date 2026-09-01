@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>KITLIST - Prepare a Gig</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-error": "#ffffff",
+                      "primary-container": "#1c1b1b",
+                      "inverse-on-surface": "#f2f1ed",
+                      "primary": "#000000",
+                      "on-tertiary-container": "#4c7fef",
+                      "surface-container": "#efeeea",
+                      "outline": "#747878",
+                      "tertiary-container": "#001946",
+                      "secondary": "#af3018",
+                      "primary-fixed": "#e5e2e1",
+                      "surface-container-lowest": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "on-primary": "#ffffff",
+                      "tertiary-fixed": "#dae2ff",
+                      "secondary-container": "#fe694b",
+                      "surface": "#faf9f5",
+                      "on-primary-fixed-variant": "#474746",
+                      "on-background": "#1b1c1a",
+                      "surface-container-low": "#f4f4f0",
+                      "inverse-primary": "#c8c6c5",
+                      "surface-bright": "#faf9f5",
+                      "primary-fixed-dim": "#c8c6c5",
+                      "surface-container-high": "#e9e8e4",
+                      "surface-variant": "#e3e2df",
+                      "background": "#faf9f5",
+                      "on-primary-container": "#858383",
+                      "inverse-surface": "#2f312e",
+                      "on-primary-fixed": "#1c1b1b",
+                      "on-secondary": "#ffffff",
+                      "on-secondary-fixed-variant": "#8d1702",
+                      "tertiary": "#000000",
+                      "on-tertiary-fixed-variant": "#00419f",
+                      "surface-dim": "#dbdad6",
+                      "secondary-fixed-dim": "#ffb4a5",
+                      "outline-variant": "#c4c7c7",
+                      "on-secondary-container": "#650c00",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-surface": "#1b1c1a",
+                      "on-secondary-fixed": "#3e0500",
+                      "tertiary-fixed-dim": "#b1c5ff",
+                      "surface-tint": "#5f5e5e",
+                      "on-tertiary-fixed": "#001946",
+                      "on-error-container": "#93000a",
+                      "on-surface-variant": "#444748",
+                      "secondary-fixed": "#ffdad3",
+                      "surface-container-highest": "#e3e2df"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "rule-weight": "1px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "margin-edge": "20px"
+              },
+              "fontFamily": {
+                      "number-display": [
+                              "Space Mono"
+                      ],
+                      "headline-lg": [
+                              "DM Sans"
+                      ],
+                      "body-md": [
+                              "DM Sans"
+                      ],
+                      "display": [
+                              "DM Sans"
+                      ],
+                      "label-mono": [
+                              "Space Mono"
+                      ],
+                      "headline-lg-mobile": [
+                              "DM Sans"
+                      ]
+              },
+              "fontSize": {
+                      "number-display": [
+                              "18px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-lg": [
+                              "28px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display": [
+                              "40px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-mono": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #faf9f5;
+            color: #1b1c1a;
+        }
+        
+        /* Functional Brutalism utilities */
+        .ruled-border {
+            border: 1px solid #1a1a1a;
+        }
+        .ruled-border-bottom {
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .ruled-border-top {
+            border-top: 1px solid #1a1a1a;
+        }
+        
+        .ink-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #1a1a1a;
+            border-radius: 0;
+            padding: 8px 0;
+            box-shadow: none !important;
+        }
+        .ink-input:focus {
+            outline: none;
+            border-bottom: 2px solid #1a1a1a;
+        }
+        
+        .chip-option {
+            border: 1px solid #1a1a1a;
+            border-radius: 0;
+            transition: all 0.1s ease;
+        }
+        .chip-option.selected {
+            background-color: #1a1a1a;
+            color: #faf9f5;
+        }
+        
+        .brutal-btn-primary {
+            background-color: #1a1a1a;
+            color: #faf9f5;
+            border: 1px solid #1a1a1a;
+            transition: all 0.1s ease;
+        }
+        .brutal-btn-primary:active {
+            transform: translate(1px, 1px);
+        }
+        
+        .brutal-btn-secondary {
+            background-color: transparent;
+            color: #1a1a1a;
+            border: 1px solid #1a1a1a;
+            transition: all 0.1s ease;
+        }
+        .brutal-btn-secondary:active {
+            background-color: #1a1a1a;
+            color: #faf9f5;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface flex justify-between items-center w-full px-margin-edge h-14 border-b border-outline dark:border-outline-variant docked full-width top-0 z-40 relative">
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-primary-container transition-colors duration-75 ease-linear p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">menu</span>
+</button>
+<div class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg tracking-tighter text-primary dark:text-primary-fixed">KITLIST</div>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container dark:hover:bg-primary-container transition-colors duration-75 ease-linear p-2 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'wght' 300;">search</span>
+</button>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow flex justify-center p-margin-edge md:p-8">
+<div class="w-full max-w-2xl bg-surface-container-lowest ruled-border p-6 md:p-10 relative">
+<!-- Page Title -->
+<div class="mb-10 ruled-border-bottom pb-4">
+<h1 class="font-display text-display uppercase tracking-tight text-primary">Prepare a Gig</h1>
+<p class="font-label-mono text-label-mono text-on-surface-variant mt-2">NEW ASSIGNMENT DIRECTIVE</p>
+</div>
+<!-- Form Layout -->
+<form class="space-y-8">
+<!-- Basic Info Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+<div class="flex flex-col relative">
+<label class="font-label-mono text-label-mono text-on-surface-variant mb-1">GIG NAME / IDENTIFIER</label>
+<input class="ink-input font-body-md text-body-md text-primary w-full" placeholder="e.g. Summer Music Festival" type="text"/>
+</div>
+<div class="flex flex-col relative">
+<label class="font-label-mono text-label-mono text-on-surface-variant mb-1">GIG TYPE</label>
+<select class="ink-input font-body-md text-body-md text-primary w-full appearance-none rounded-none bg-transparent cursor-pointer">
+<option disabled="" selected="" value="">Select category...</option>
+<option value="corporate">Corporate Event</option>
+<option value="music">Music/Concert</option>
+<option value="studio">Studio Session</option>
+<option value="field">Field Recording</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 bottom-2 pointer-events-none" style="font-variation-settings: 'wght' 200;">arrow_drop_down</span>
+</div>
+<div class="flex flex-col relative">
+<label class="font-label-mono text-label-mono text-on-surface-variant mb-1">DATE / DURATION</label>
+<input class="ink-input font-body-md text-body-md text-primary w-full uppercase" type="date"/>
+</div>
+<div class="flex flex-col relative">
+<label class="font-label-mono text-label-mono text-on-surface-variant mb-1">LOCATION / VENUE</label>
+<input class="ink-input font-body-md text-body-md text-primary w-full" placeholder="Address or venue name" type="text"/>
+<span class="material-symbols-outlined absolute right-0 bottom-2 text-on-surface-variant" style="font-variation-settings: 'wght' 200;">location_on</span>
+</div>
+</div>
+<!-- Needs Selection -->
+<div class="pt-6 ruled-border-top">
+<label class="font-label-mono text-label-mono text-primary mb-4 block">WHAT ARE YOU BRINGING?</label>
+<div class="flex flex-wrap gap-3">
+<button class="chip-option px-4 py-2 font-label-mono text-label-mono uppercase hover:bg-surface-container-high" onclick="this.classList.toggle('selected')" type="button">Photo</button>
+<button class="chip-option px-4 py-2 font-label-mono text-label-mono uppercase hover:bg-surface-container-high" onclick="this.classList.toggle('selected')" type="button">Video</button>
+<button class="chip-option px-4 py-2 font-label-mono text-label-mono uppercase hover:bg-surface-container-high" onclick="this.classList.toggle('selected')" type="button">Audio</button>
+<button class="chip-option px-4 py-2 font-label-mono text-label-mono uppercase hover:bg-surface-container-high" onclick="this.classList.toggle('selected')" type="button">Light</button>
+<button class="chip-option px-4 py-2 font-label-mono text-label-mono uppercase hover:bg-surface-container-high" onclick="this.classList.toggle('selected')" type="button">Stream</button>
+</div>
+</div>
+<!-- Notes Area -->
+<div class="pt-6 ruled-border-top">
+<label class="font-label-mono text-label-mono text-on-surface-variant mb-1 block">ADDITIONAL DIRECTIVES / NOTES</label>
+<textarea class="ink-input font-body-md text-body-md text-primary w-full h-24 resize-none" placeholder="Special requirements, client requests, etc..."></textarea>
+</div>
+<!-- Action Area -->
+<div class="pt-8 flex flex-col md:flex-row gap-4 justify-end items-center">
+<button class="brutal-btn-secondary w-full md:w-auto px-6 py-3 font-label-mono text-label-mono uppercase flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+                        Ask AI
+                    </button>
+<button class="brutal-btn-primary w-full md:w-auto px-8 py-3 font-label-mono text-label-mono uppercase flex items-center justify-center gap-2" type="button">
+                        Build My List
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden flex justify-around items-center w-full h-16 px-margin-edge bg-surface dark:bg-surface fixed bottom-0 w-full z-50 border-t border-outline dark:border-outline-variant flat no shadows">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-container font-bold active:invert transition-all duration-100 hover:opacity-100 w-full h-full" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">event_note</span>
+<span class="font-label-mono text-label-mono uppercase text-[10px]">Gigs</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 active:invert transition-all duration-100 hover:opacity-100 w-full h-full" href="#">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span class="font-label-mono text-label-mono uppercase text-[10px]">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant opacity-60 active:invert transition-all duration-100 hover:opacity-100 w-full h-full" href="#">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-label-mono text-label-mono uppercase text-[10px]">Settings</span>
+</a>
+</nav>
+<!-- spacer for mobile nav -->
+<div class="h-16 md:hidden w-full"></div>
+</body></html>
