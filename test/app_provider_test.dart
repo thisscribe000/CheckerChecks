@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:checkerchecks/providers/app_provider.dart';
-import 'package:checkerchecks/models/checklist_item.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -156,7 +155,6 @@ void main() {
       final provider = AppProvider();
       await Future.delayed(const Duration(milliseconds: 100));
 
-      final initialInvCount = provider.inventory.length;
       final itemToRent = provider.inventory.first;
       
       expect(itemToRent.rentalStatus, 'Available');
@@ -189,6 +187,63 @@ void main() {
       final returnedItem = provider.inventory.firstWhere((i) => i.id == itemToRent.id);
       expect(returnedItem.rentalStatus, 'Available');
       expect(returnedItem.activeRentalId, null);
+    });
+
+    test('Profile update, cloud sync toggle, and JSON export/import', () async {
+      final provider = AppProvider();
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // Test profile update
+      provider.updateProfile(
+        name: 'Jordan Lee',
+        email: 'jordan@filmmaker.io',
+        role: 'Filmmaker',
+      );
+      expect(provider.userName, 'Jordan Lee');
+      expect(provider.userEmail, 'jordan@filmmaker.io');
+      expect(provider.userRole, 'Filmmaker');
+
+      // Test cloud sync toggle
+      expect(provider.cloudSyncEnabled, true);
+      provider.toggleCloudSync(false);
+      expect(provider.cloudSyncEnabled, false);
+
+      // Test export
+      final jsonOutput = provider.exportDataAsJson();
+      expect(jsonOutput.contains('Jordan Lee'), true);
+      expect(jsonOutput.contains('CheckerChecks'), true);
+
+      // Test import
+      final newJson = '''
+      {
+        "app": "CheckerChecks",
+        "profile": {
+          "name": "Sam Taylor",
+          "email": "sam@studio.org",
+          "role": "Audio"
+        },
+        "inventory": [
+          {
+            "id": "imported-1",
+            "name": "Sennheiser MKH 416",
+            "category": "Audio",
+            "quantity": 1
+          }
+        ],
+        "gigs": [],
+        "rentals": []
+      }
+      ''';
+      final success = provider.importDataFromJson(newJson);
+      expect(success, true);
+      expect(provider.userName, 'Sam Taylor');
+      expect(provider.inventory.length, 1);
+      expect(provider.inventory.first.name, 'Sennheiser MKH 416');
+
+      // Test reset to defaults
+      provider.resetToDefaults();
+      expect(provider.inventory.length, 10);
+      expect(provider.gigs.length, 1);
     });
   });
 }

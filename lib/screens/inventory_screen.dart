@@ -436,7 +436,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 Text('CATEGORY', style: StitchTheme.labelCaps(context)),
                 const SizedBox(height: 6),
                 DropdownButtonFormField<String>(
-                  value: _categoryFilters.contains(category) && category != 'All' ? category : 'Other',
+                  initialValue: _categoryFilters.contains(category) && category != 'All' ? category : 'Other',
                   decoration: _inputDec('Category'),
                   items: _categoryFilters
                       .where((c) => c != 'All')

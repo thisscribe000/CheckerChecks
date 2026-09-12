@@ -1,0 +1,12 @@
+CheckerChecks is an offline-first gear inventory, gig packing checklist, and equipment rental management app built for creative professionals, production companies, and rental houses.
+
+Whether you are a solo videographer, commercial photographer, sound engineer, or running a boutique rental business, CheckerChecks ensures you never leave critical gear behind and never double-book rented equipment.
+
+FEATURES:
+• Gear Inventory: Catalog your cameras, lenses, microphones, lighting, batteries, and accessories with categories, serial numbers, brands, and quantities.
+• Production Gigs & Prep: Create gigs with shoot sizes, locations (indoor/outdoor), and dates.
+• Intelligent Packing Checklists: Real-time inventory matching warns you when items are missing or rented out to clients.
+• Distraction-Free Packing Mode: High-contrast, large-target packing workflow with progress tracking and instant readiness verification.
+• Rental Management: Track active and returned gear rentals. Marking gear out automatically locks it from packing checklists; returning gear releases it back to inventory.
+• Smart Kit Recommendations: Context-aware kit suggestions tailored for your gig type, venue, and gear profile.
+• 100% Offline Capable: All data is securely stored locally on your device with zero forced cloud accounts.

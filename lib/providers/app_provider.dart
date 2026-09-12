@@ -10,6 +10,9 @@ import '../services/firebase_sync_service.dart';
 class AppProvider with ChangeNotifier {
   bool _onboardingCompleted = false;
   String _userRole = 'Photography';
+  String _userName = 'Alex Mercer';
+  String _userEmail = 'alex.mercer@creative.studio';
+  bool _cloudSyncEnabled = true;
   List<InventoryItem> _inventory = [];
   List<Gig> _gigs = [];
   List<Rental> _rentals = [];
@@ -17,6 +20,9 @@ class AppProvider with ChangeNotifier {
 
   bool get onboardingCompleted => _onboardingCompleted;
   String get userRole => _userRole;
+  String get userName => _userName;
+  String get userEmail => _userEmail;
+  bool get cloudSyncEnabled => _cloudSyncEnabled;
   List<InventoryItem> get inventory => _inventory;
   List<Gig> get gigs => _gigs;
   List<Rental> get rentals => _rentals;
@@ -42,6 +48,10 @@ class AppProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     _onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
     _userRole = prefs.getString('user_role') ?? 'Photography';
+
+    _userName = prefs.getString('user_name') ?? 'Alex Mercer';
+    _userEmail = prefs.getString('user_email') ?? 'alex.mercer@creative.studio';
+    _cloudSyncEnabled = prefs.getBool('cloud_sync_enabled') ?? true;
 
     final inventoryString = prefs.getString('inventory_data');
     if (inventoryString != null) {
@@ -87,6 +97,9 @@ class AppProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboarding_completed', _onboardingCompleted);
     await prefs.setString('user_role', _userRole);
+    await prefs.setString('user_name', _userName);
+    await prefs.setString('user_email', _userEmail);
+    await prefs.setBool('cloud_sync_enabled', _cloudSyncEnabled);
     final inventoryJson = jsonEncode(_inventory.map((i) => i.toJson()).toList());
     await prefs.setString('inventory_data', inventoryJson);
     final gigsJson = jsonEncode(_gigs.map((g) => g.toJson()).toList());
@@ -94,8 +107,10 @@ class AppProvider with ChangeNotifier {
     final rentalsJson = jsonEncode(_rentals.map((r) => r.toJson()).toList());
     await prefs.setString('rentals_data', rentalsJson);
 
-    // Fire off the background sync to Firebase
-    FirebaseSyncService.syncAll(_inventory, _gigs, _rentals);
+    // Fire off the background sync to Firebase only if enabled
+    if (_cloudSyncEnabled) {
+      FirebaseSyncService.syncAll(_inventory, _gigs, _rentals);
+    }
   }
 
   void _populateDefaultInventory() {
@@ -191,6 +206,83 @@ class AppProvider with ChangeNotifier {
   void completeOnboarding(String role) {
     _onboardingCompleted = true;
     _userRole = role;
+    _saveData();
+    notifyListeners();
+  }
+
+  // ── Profile & Settings ─────────────────────────────────────────────────────
+
+  void updateProfile({
+    required String name,
+    required String email,
+    required String role,
+  }) {
+    _userName = name;
+    _userEmail = email;
+    _userRole = role;
+    _saveData();
+    notifyListeners();
+  }
+
+  void toggleCloudSync(bool enabled) {
+    _cloudSyncEnabled = enabled;
+    _saveData();
+    notifyListeners();
+  }
+
+  String exportDataAsJson() {
+    final data = {
+      'app': 'CheckerChecks',
+      'version': '1.0.0+1',
+      'exportedAt': DateTime.now().toIso8601String(),
+      'profile': {
+        'name': _userName,
+        'email': _userEmail,
+        'role': _userRole,
+      },
+      'inventory': _inventory.map((i) => i.toJson()).toList(),
+      'gigs': _gigs.map((g) => g.toJson()).toList(),
+      'rentals': _rentals.map((r) => r.toJson()).toList(),
+    };
+    return const JsonEncoder.withIndent('  ').convert(data);
+  }
+
+  bool importDataFromJson(String jsonString) {
+    try {
+      final Map<String, dynamic> data = jsonDecode(jsonString);
+      if (data.containsKey('profile') && data['profile'] is Map) {
+        final profile = data['profile'] as Map<String, dynamic>;
+        if (profile['name'] != null) _userName = profile['name'].toString();
+        if (profile['email'] != null) _userEmail = profile['email'].toString();
+        if (profile['role'] != null) _userRole = profile['role'].toString();
+      }
+      if (data.containsKey('inventory') && data['inventory'] is List) {
+        final invList = data['inventory'] as List<dynamic>;
+        _inventory = invList.map((i) => InventoryItem.fromJson(i)).toList();
+      }
+      if (data.containsKey('gigs') && data['gigs'] is List) {
+        final gigsList = data['gigs'] as List<dynamic>;
+        _gigs = gigsList.map((g) => Gig.fromJson(g)).toList();
+      }
+      if (data.containsKey('rentals') && data['rentals'] is List) {
+        final rentalsList = data['rentals'] as List<dynamic>;
+        _rentals = rentalsList.map((r) => Rental.fromJson(r)).toList();
+      }
+      _refreshInventoryMatchingForAllGigs();
+      _saveData();
+      notifyListeners();
+      return true;
+    } catch (e) {
+      debugPrint("Error importing data: $e");
+      return false;
+    }
+  }
+
+  void resetToDefaults() {
+    _populateDefaultInventory();
+    _populateDefaultGigs();
+    _rentals = [];
+    _refreshInventoryMatchingForAllGigs();
     _saveData();
     notifyListeners();
   }

@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -6,27 +7,29 @@ import '../models/gig.dart';
 import '../models/rental.dart';
 
 class FirebaseSyncService {
-  static final FirebaseFirestore _db = FirebaseFirestore.instance;
-  static final FirebaseAuth _auth = FirebaseAuth.instance;
-
   static Future<void> syncAll(
     List<InventoryItem> inventory,
     List<Gig> gigs,
     List<Rental> rentals,
   ) async {
-    final user = _auth.currentUser;
-    if (user == null) {
-      debugPrint("FirebaseSyncService: No user signed in, skipping sync.");
-      return;
-    }
-
-    final uid = user.uid;
-    
     try {
-      final userDoc = _db.collection('users').doc(uid);
+      if (Firebase.apps.isEmpty) {
+        return;
+      }
+
+      final auth = FirebaseAuth.instance;
+      final user = auth.currentUser;
+      if (user == null) {
+        debugPrint("FirebaseSyncService: No user signed in, skipping sync.");
+        return;
+      }
+
+      final uid = user.uid;
+      final db = FirebaseFirestore.instance;
+      final userDoc = db.collection('users').doc(uid);
       
       // Write Inventory
-      final inventoryBatch = _db.batch();
+      final inventoryBatch = db.batch();
       for (final item in inventory) {
         final docRef = userDoc.collection('inventory').doc(item.id);
         inventoryBatch.set(docRef, item.toJson());
@@ -34,7 +37,7 @@ class FirebaseSyncService {
       if (inventory.isNotEmpty) await inventoryBatch.commit();
 
       // Write Gigs
-      final gigsBatch = _db.batch();
+      final gigsBatch = db.batch();
       for (final gig in gigs) {
         final docRef = userDoc.collection('gigs').doc(gig.id);
         gigsBatch.set(docRef, gig.toJson());
@@ -42,7 +45,7 @@ class FirebaseSyncService {
       if (gigs.isNotEmpty) await gigsBatch.commit();
 
       // Write Rentals
-      final rentalsBatch = _db.batch();
+      final rentalsBatch = db.batch();
       for (final rental in rentals) {
         final docRef = userDoc.collection('rentals').doc(rental.id);
         rentalsBatch.set(docRef, rental.toJson());

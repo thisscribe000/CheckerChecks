@@ -1,0 +1,44 @@
+Categories:
+  - Multimedia
+  - Development
+License: MIT
+AuthorName: CheckerChecks Team
+SourceCode: https://github.com/thisscribe000/CheckerChecks
+IssueTracker: https://github.com/thisscribe000/CheckerChecks/issues
+
+AutoName: CheckerChecks
+Summary: Gear inventory, gig packing checklists & rental tracking
+
+Description: |-
+  CheckerChecks is a high-contrast, offline-first gear inventory,
+  production gig checklist, and equipment rental management app built
+  for creative professionals, videographers, photographers, audio
+  engineers, and rental facilities.
+
+  Key Features:
+  * Complete gear inventory database with serial numbers, brands, categories, and quantities
+  * Production gig manager with shoot scales, indoor/outdoor locations, and dates
+  * Intelligent packing validation that warns when gear is missing or rented out
+  * Distraction-free Packing Mode with quick-tap checkboxes and readiness alerts
+  * Customer rental checkout and return tracking with automatic gear status sync
+  * Smart kit recommendation engine tailored to shoot parameters
+  * 100% offline-first local storage
+
+RepoType: git
+Repo: https://github.com/thisscribe000/CheckerChecks.git
+
+Builds:
+  - versionName: 1.0.0+1
+    versionCode: 1
+    commit: v1.0.0
+    subdir: android
+    output: build/app/outputs/flutter-apk/app-release.apk
+    build:
+      - $$flutter$$/bin/flutter config --no-analytics
+      - $$flutter$$/bin/flutter pub get
+      - $$flutter$$/bin/flutter build apk --release
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+CurrentVersion: 1.0.0+1
+CurrentVersionCode: 1

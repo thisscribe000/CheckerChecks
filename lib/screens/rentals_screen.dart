@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../theme/stitch_theme.dart';
 import '../models/rental.dart';
-import '../models/inventory_item.dart';
 
 class RentalsScreen extends StatefulWidget {
   const RentalsScreen({super.key});
