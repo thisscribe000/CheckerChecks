@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../theme/stitch_theme.dart';
 import 'add_inventory_screen.dart';
+import '../widgets/equipment_scanner_sheet.dart';
+import '../widgets/qr_code_tag_dialog.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -36,7 +38,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
     final filteredItems = inventory.where((item) {
       final matchesSearch = item.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           (item.brand != null && item.brand!.toLowerCase().contains(_searchQuery.toLowerCase())) ||
-          (item.serialNumber != null && item.serialNumber!.toLowerCase().contains(_searchQuery.toLowerCase()));
+          (item.serialNumber != null && item.serialNumber!.toLowerCase().contains(_searchQuery.toLowerCase())) ||
+          (item.barcode != null && item.barcode!.toLowerCase().contains(_searchQuery.toLowerCase()));
 
       final matchesCategory = _selectedCategoryFilter == 'All' ||
           item.category.toLowerCase() == _selectedCategoryFilter.toLowerCase();
@@ -50,7 +53,21 @@ class _InventoryScreenState extends State<InventoryScreen> {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
+            icon: const Icon(Icons.qr_code_scanner),
+            tooltip: 'Scan Barcode',
+            onPressed: () {
+              EquipmentScannerSheet.show(
+                context,
+                mode: ScannerMode.lookup,
+                onBarcodeDetected: (code) {
+                  setState(() => _searchQuery = code);
+                },
+              );
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.add, size: 26),
+            tooltip: 'Add Gear',
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const AddInventoryScreen()),
@@ -80,6 +97,29 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     hintText: 'Search gear...',
                     hintStyle: StitchTheme.bodyLg(context).copyWith(color: StitchTheme.outline),
                     prefixIcon: const Icon(Icons.search, size: 20, color: StitchTheme.onSurfaceVariant),
+                    suffixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (_searchQuery.isNotEmpty)
+                          IconButton(
+                            icon: const Icon(Icons.clear, size: 18),
+                            onPressed: () => setState(() => _searchQuery = ''),
+                          ),
+                        IconButton(
+                          icon: const Icon(Icons.qr_code_scanner, size: 20, color: StitchTheme.primary),
+                          tooltip: 'Scan Barcode',
+                          onPressed: () {
+                            EquipmentScannerSheet.show(
+                              context,
+                              mode: ScannerMode.lookup,
+                              onBarcodeDetected: (code) {
+                                setState(() => _searchQuery = code);
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                     filled: true,
                     fillColor: StitchTheme.surfaceContainerLowest,
                     contentPadding: const EdgeInsets.symmetric(vertical: 12),
@@ -345,16 +385,35 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                 ],
               ),
-              if (item.serialNumber != null || item.notes != null) ...[
+              if (item.serialNumber != null || item.barcode != null || item.notes != null) ...[
                 const SizedBox(height: 12),
                 if (item.serialNumber != null)
                   Text('Serial / Specs: ${item.serialNumber}', style: StitchTheme.monoSm(context)),
+                if (item.barcode != null)
+                  Text('Barcode / Tag: ${item.barcode}', style: StitchTheme.monoSm(context).copyWith(color: StitchTheme.primary)),
                 if (item.notes != null) ...[
                   const SizedBox(height: 4),
                   Text('Notes: ${item.notes}', style: StitchTheme.bodyMd(context)),
                 ],
               ],
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.of(ctx).pop();
+                    QrCodeTagDialog.show(context, item);
+                  },
+                  icon: const Icon(Icons.qr_code, size: 18),
+                  label: const Text('View & Print QR Tag'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: StitchTheme.primary,
+                    foregroundColor: StitchTheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               const Divider(height: 1),
               const SizedBox(height: 12),
               Row(
@@ -405,6 +464,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     final nameCtrl = TextEditingController(text: item.name);
     final brandCtrl = TextEditingController(text: item.brand ?? '');
     final serialCtrl = TextEditingController(text: item.serialNumber ?? '');
+    final barcodeCtrl = TextEditingController(text: item.barcode ?? '');
     final notesCtrl = TextEditingController(text: item.notes ?? '');
     String category = item.category;
     int quantity = item.quantity;
@@ -473,6 +533,51 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ],
                 ),
                 const SizedBox(height: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('BARCODE / QR TAG', style: StitchTheme.labelCaps(context)),
+                    TextButton.icon(
+                      onPressed: () async {
+                        final scanned = await EquipmentScannerSheet.show(
+                          context,
+                          mode: ScannerMode.assignBarcode,
+                          targetItemName: item.name,
+                        );
+                        if (scanned != null) {
+                          setDialogState(() {
+                            barcodeCtrl.text = scanned;
+                          });
+                        }
+                      },
+                      icon: const Icon(Icons.qr_code_scanner, size: 16),
+                      label: const Text('Scan with Camera'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                TextField(
+                  controller: barcodeCtrl,
+                  decoration: _inputDec('Barcode or custom QR code').copyWith(
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      tooltip: 'Scan Barcode',
+                      onPressed: () async {
+                        final scanned = await EquipmentScannerSheet.show(
+                          context,
+                          mode: ScannerMode.assignBarcode,
+                          targetItemName: item.name,
+                        );
+                        if (scanned != null) {
+                          setDialogState(() {
+                            barcodeCtrl.text = scanned;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 14),
                 Text('NOTES', style: StitchTheme.labelCaps(context)),
                 const SizedBox(height: 6),
                 TextField(controller: notesCtrl, maxLines: 2, decoration: _inputDec('Notes')),
@@ -491,6 +596,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         quantity: quantity,
                         brand: brandCtrl.text.trim().isNotEmpty ? brandCtrl.text.trim() : null,
                         serialNumber: serialCtrl.text.trim().isNotEmpty ? serialCtrl.text.trim() : null,
+                        barcode: barcodeCtrl.text.trim().isNotEmpty ? barcodeCtrl.text.trim() : null,
                         notes: notesCtrl.text.trim().isNotEmpty ? notesCtrl.text.trim() : null,
                       );
                       Navigator.of(ctx).pop();

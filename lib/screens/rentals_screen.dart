@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../theme/stitch_theme.dart';
 import '../models/rental.dart';
+import '../widgets/equipment_scanner_sheet.dart';
+import '../widgets/qr_code_tag_dialog.dart';
 
 class RentalsScreen extends StatefulWidget {
   const RentalsScreen({super.key});
@@ -39,6 +41,13 @@ class _RentalsScreenState extends State<RentalsScreen>
       appBar: AppBar(
         title: const Text('Rentals'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.qr_code_scanner),
+            tooltip: 'Scan Gear',
+            onPressed: () {
+              EquipmentScannerSheet.show(context, mode: ScannerMode.lookup);
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.help_outline),
             onPressed: () {},
@@ -177,6 +186,58 @@ class _RentalList extends StatelessWidget {
                     ),
                   ],
                 ),
+                if (isActive) ...[
+                  const SizedBox(height: 12),
+                  const Divider(height: 1, color: StitchTheme.outlineVariant),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        rental.verifiedCount > 0
+                            ? '${rental.verifiedCount}/${rental.totalCount} items verified'
+                            : 'Return ready',
+                        style: StitchTheme.monoSm(context).copyWith(
+                          color: rental.isFullyVerified
+                              ? StitchTheme.success
+                              : StitchTheme.outline,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      OutlinedButton.icon(
+                        icon: const Icon(Icons.qr_code_scanner, size: 16),
+                        label: Text(
+                          rental.isFullyVerified
+                              ? 'Return Verified'
+                              : (rental.verifiedCount > 0
+                                  ? 'Scan (${rental.verifiedCount}/${rental.totalCount})'
+                                  : 'Scan to Return'),
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: rental.isFullyVerified
+                              ? StitchTheme.success
+                              : StitchTheme.primary,
+                          side: BorderSide(
+                            color: rental.isFullyVerified
+                                ? StitchTheme.success
+                                : StitchTheme.primary,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
+                          visualDensity: VisualDensity.compact,
+                        ),
+                        onPressed: () {
+                          EquipmentScannerSheet.show(
+                            context,
+                            mode: ScannerMode.rentalReturn,
+                            rental: rental,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
@@ -244,52 +305,124 @@ class _RentalList extends StatelessWidget {
                           style: StitchTheme.labelCaps(context)),
                       const SizedBox(height: 12),
                       for (final gear in rentedGear)
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: StitchTheme.surfaceContainerLow,
-                            borderRadius: BorderRadius.circular(4),
-                            border:
-                                Border.all(color: StitchTheme.outlineVariant),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.inventory_2_outlined,
-                                  size: 16, color: StitchTheme.outline),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(gear.name,
-                                    style: StitchTheme.headlineMd(context)
-                                        .copyWith(fontSize: 14)),
+                        Builder(
+                          builder: (context) {
+                            final isVerified = rental.isItemVerified(gear.id);
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: isVerified
+                                    ? StitchTheme.success.withValues(alpha: 0.12)
+                                    : StitchTheme.surfaceContainerLow,
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(
+                                  color: isVerified
+                                      ? StitchTheme.success
+                                      : StitchTheme.outlineVariant,
+                                ),
                               ),
-                            ],
-                          ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    isVerified
+                                        ? Icons.check_circle
+                                        : Icons.inventory_2_outlined,
+                                    size: 18,
+                                    color: isVerified
+                                        ? StitchTheme.success
+                                        : StitchTheme.outline,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(gear.name,
+                                            style: StitchTheme.headlineMd(
+                                                    context)
+                                                .copyWith(fontSize: 14)),
+                                        Text(
+                                          'Code: ${gear.primaryCode}',
+                                          style: StitchTheme.monoSm(context)
+                                              .copyWith(fontSize: 11),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.qr_code, size: 20),
+                                    tooltip: 'View QR Tag',
+                                    onPressed: () =>
+                                        QrCodeTagDialog.show(context, gear),
+                                  ),
+                                  if (rental.status == 'Active')
+                                    IconButton(
+                                      icon: Icon(
+                                        isVerified
+                                            ? Icons.check_box
+                                            : Icons.check_box_outline_blank,
+                                        color: isVerified
+                                            ? StitchTheme.success
+                                            : StitchTheme.outline,
+                                      ),
+                                      tooltip: 'Toggle verification',
+                                      onPressed: () {
+                                        provider.toggleRentalItemVerified(
+                                            rental.id, gear.id);
+                                      },
+                                    ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                      const SizedBox(height: 32),
-                      if (rental.status == 'Active')
+                      const SizedBox(height: 28),
+                      if (rental.status == 'Active') ...[
                         SizedBox(
                           width: double.infinity,
                           height: 50,
-                          child: ElevatedButton(
+                          child: ElevatedButton.icon(
+                            icon: const Icon(Icons.qr_code_scanner, size: 20),
+                            label: Text(
+                              rental.isFullyVerified
+                                  ? 'All Items Verified ✓'
+                                  : 'Scan Return Items (${rental.verifiedCount}/${rental.totalCount})',
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: rental.isFullyVerified
+                                  ? StitchTheme.success
+                                  : StitchTheme.primary,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                            ),
+                            onPressed: () {
+                              Navigator.of(ctx).pop();
+                              EquipmentScannerSheet.show(
+                                context,
+                                mode: ScannerMode.rentalReturn,
+                                rental: rental,
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 46,
+                          child: OutlinedButton(
                             onPressed: () {
                               provider.completeRental(rental.id);
                               Navigator.of(ctx).pop();
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: StitchTheme.success,
-                              foregroundColor: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4)),
-                            ),
-                            child: Text('Mark as Returned',
-                                style: StitchTheme.headlineMd(context)
-                                    .copyWith(
-                                        color: Colors.white, fontSize: 15)),
+                            child: const Text('Mark as Returned (Skip Scan)'),
                           ),
                         ),
-                      if (rental.status == 'Active') const SizedBox(height: 12),
+                        const SizedBox(height: 12),
+                      ],
                       SizedBox(
                         width: double.infinity,
                         height: 50,

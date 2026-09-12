@@ -245,5 +245,101 @@ void main() {
       expect(provider.inventory.length, 10);
       expect(provider.gigs.length, 1);
     });
+
+    test('Barcode assignment and lookup by barcode, serial number, and ID', () async {
+      final provider = AppProvider();
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      final targetItem = provider.inventory.first;
+
+      // Assign barcode
+      provider.assignBarcodeToInventoryItem(targetItem.id, 'BARCODE-999');
+      final updatedItem = provider.inventory.firstWhere((i) => i.id == targetItem.id);
+      expect(updatedItem.barcode, 'BARCODE-999');
+
+      // Lookup by barcode
+      final foundByBarcode = provider.findInventoryItemByCode('BARCODE-999');
+      expect(foundByBarcode, isNotNull);
+      expect(foundByBarcode!.id, targetItem.id);
+
+      // Lookup by case-insensitive barcode
+      final foundCaseInsensitive = provider.findInventoryItemByCode('barcode-999');
+      expect(foundCaseInsensitive, isNotNull);
+      expect(foundCaseInsensitive!.id, targetItem.id);
+
+      // Lookup by item ID
+      final foundById = provider.findInventoryItemByCode(targetItem.id);
+      expect(foundById, isNotNull);
+      expect(foundById!.id, targetItem.id);
+
+      // Lookup by serial number
+      final itemWithSerial = provider.inventory.firstWhere((i) => i.serialNumber != null);
+      final foundBySerial = provider.findInventoryItemByCode(itemWithSerial.serialNumber!);
+      expect(foundBySerial, isNotNull);
+      expect(foundBySerial!.id, itemWithSerial.id);
+
+      // Non-existent code returns null
+      final notFound = provider.findInventoryItemByCode('DOES-NOT-EXIST-404');
+      expect(notFound, isNull);
+    });
+
+    test('Rental scan-to-return item verification workflow', () async {
+      final provider = AppProvider();
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      final itemA = provider.inventory[0];
+      final itemB = provider.inventory[1];
+
+      provider.assignBarcodeToInventoryItem(itemA.id, 'A7IV-BARCODE-01');
+      provider.assignBarcodeToInventoryItem(itemB.id, '2470-BARCODE-02');
+
+      // Create a rental with 2 items
+      final rental = provider.createRental(
+        customerName: 'Marcus Cole',
+        customerContact: 'marcus@lensrentals.test',
+        startDate: '2026-09-12',
+        expectedReturnDate: '2026-09-15',
+        inventoryItemIds: [itemA.id, itemB.id],
+      );
+
+      expect(rental.verifiedReturnItemIds.isEmpty, true);
+      expect(rental.isFullyVerified, false);
+      expect(rental.verifiedCount, 0);
+
+      // Scan first item
+      final scanResultA = provider.verifyRentalItemReturn(rental.id, 'A7IV-BARCODE-01');
+      expect(scanResultA, true);
+
+      final updatedRental1 = provider.rentals.firstWhere((r) => r.id == rental.id);
+      expect(updatedRental1.verifiedCount, 1);
+      expect(updatedRental1.isItemVerified(itemA.id), true);
+      expect(updatedRental1.isItemVerified(itemB.id), false);
+      expect(updatedRental1.isFullyVerified, false);
+
+      // Scan same item again (already verified, returns false)
+      final scanDuplicate = provider.verifyRentalItemReturn(rental.id, 'A7IV-BARCODE-01');
+      expect(scanDuplicate, false);
+
+      // Scan item not in this rental (returns false)
+      final scanWrongItem = provider.verifyRentalItemReturn(rental.id, 'NON-RENTED-CODE');
+      expect(scanWrongItem, false);
+
+      // Scan second item
+      final scanResultB = provider.verifyRentalItemReturn(rental.id, '2470-BARCODE-02');
+      expect(scanResultB, true);
+
+      final updatedRental2 = provider.rentals.firstWhere((r) => r.id == rental.id);
+      expect(updatedRental2.verifiedCount, 2);
+      expect(updatedRental2.isFullyVerified, true);
+
+      // Test manual toggle and reset
+      provider.toggleRentalItemVerified(rental.id, itemA.id);
+      final toggledRental = provider.rentals.firstWhere((r) => r.id == rental.id);
+      expect(toggledRental.isItemVerified(itemA.id), false);
+
+      provider.resetRentalVerification(rental.id);
+      final resetRental = provider.rentals.firstWhere((r) => r.id == rental.id);
+      expect(resetRental.verifiedCount, 0);
+    });
   });
 }

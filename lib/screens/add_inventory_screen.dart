@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/app_provider.dart';
 import '../theme/stitch_theme.dart';
+import '../widgets/equipment_scanner_sheet.dart';
 
 class AddInventoryScreen extends StatefulWidget {
   const AddInventoryScreen({super.key});
@@ -15,6 +16,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
   final _nameController = TextEditingController();
   final _brandController = TextEditingController();
   final _serialController = TextEditingController();
+  final _barcodeController = TextEditingController();
   final _notesController = TextEditingController();
 
   String _selectedCategory = 'Cameras';
@@ -36,6 +38,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     _nameController.dispose();
     _brandController.dispose();
     _serialController.dispose();
+    _barcodeController.dispose();
     _notesController.dispose();
     super.dispose();
   }
@@ -50,6 +53,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         brand: _brandController.text.trim().isNotEmpty ? _brandController.text.trim() : null,
         notes: _notesController.text.trim().isNotEmpty ? _notesController.text.trim() : null,
         serialNumber: _serialController.text.trim().isNotEmpty ? _serialController.text.trim() : null,
+        barcode: _barcodeController.text.trim().isNotEmpty ? _barcodeController.text.trim() : null,
       );
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -233,6 +237,61 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                     ),
                   ),
                 ],
+              ),
+              const SizedBox(height: 20),
+
+              // Barcode / QR Code Tag
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('BARCODE / QR TAG (OPTIONAL)', style: StitchTheme.labelCaps(context)),
+                  TextButton.icon(
+                    onPressed: () async {
+                      final scanned = await EquipmentScannerSheet.show(
+                        context,
+                        mode: ScannerMode.assignBarcode,
+                      );
+                      if (scanned != null) {
+                        setState(() {
+                          _barcodeController.text = scanned;
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.qr_code_scanner, size: 16),
+                    label: const Text('Scan with Camera'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              TextFormField(
+                controller: _barcodeController,
+                style: StitchTheme.bodyLg(context).copyWith(color: StitchTheme.primary),
+                decoration: InputDecoration(
+                  hintText: 'e.g. 012345678905 or custom QR code',
+                  hintStyle: StitchTheme.bodyLg(context).copyWith(color: StitchTheme.outline),
+                  filled: true,
+                  fillColor: StitchTheme.surfaceContainerLowest,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.camera_alt_outlined),
+                    tooltip: 'Scan with Camera',
+                    onPressed: () async {
+                      final scanned = await EquipmentScannerSheet.show(
+                        context,
+                        mode: ScannerMode.assignBarcode,
+                      );
+                      if (scanned != null) {
+                        setState(() {
+                          _barcodeController.text = scanned;
+                        });
+                      }
+                    },
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(4),
+                    borderSide: const BorderSide(color: StitchTheme.outlineVariant),
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
 

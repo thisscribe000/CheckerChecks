@@ -303,6 +303,7 @@ class AppProvider with ChangeNotifier {
     String? brand,
     String? notes,
     String? serialNumber,
+    String? barcode,
   }) {
     final newItem = InventoryItem(
       id: 'inv-${DateTime.now().millisecondsSinceEpoch}',
@@ -312,6 +313,7 @@ class AppProvider with ChangeNotifier {
       brand: brand,
       notes: notes,
       serialNumber: serialNumber,
+      barcode: barcode,
     );
     _inventory.insert(0, newItem);
     _refreshInventoryMatchingForAllGigs();
@@ -327,6 +329,7 @@ class AppProvider with ChangeNotifier {
     String? brand,
     String? notes,
     String? serialNumber,
+    String? barcode,
   }) {
     final index = _inventory.indexWhere((i) => i.id == id);
     if (index != -1) {
@@ -337,11 +340,39 @@ class AppProvider with ChangeNotifier {
         brand: brand,
         notes: notes,
         serialNumber: serialNumber,
+        barcode: barcode,
       );
       _refreshInventoryMatchingForAllGigs();
       _saveData();
       notifyListeners();
     }
+  }
+
+  void assignBarcodeToInventoryItem(String id, String barcode) {
+    final index = _inventory.indexWhere((i) => i.id == id);
+    if (index != -1) {
+      _inventory[index] = _inventory[index].copyWith(barcode: barcode);
+      _saveData();
+      notifyListeners();
+    }
+  }
+
+  InventoryItem? findInventoryItemByCode(String rawCode) {
+    final code = rawCode.trim().toLowerCase();
+    if (code.isEmpty) return null;
+
+    for (final item in _inventory) {
+      if (item.barcode != null && item.barcode!.trim().toLowerCase() == code) {
+        return item;
+      }
+      if (item.serialNumber != null && item.serialNumber!.trim().toLowerCase() == code) {
+        return item;
+      }
+      if (item.id.toLowerCase() == code) {
+        return item;
+      }
+    }
+    return null;
   }
 
   void deleteInventoryItem(String id) {
@@ -674,6 +705,73 @@ class AppProvider with ChangeNotifier {
         expectedReturnDate: expectedReturnDate,
         notes: notes,
       );
+      _saveData();
+      notifyListeners();
+    }
+  }
+
+  bool verifyRentalItemReturn(String rentalId, String codeOrId) {
+    final rentalIndex = _rentals.indexWhere((r) => r.id == rentalId);
+    if (rentalIndex == -1) return false;
+
+    final rental = _rentals[rentalIndex];
+    final trimmedCode = codeOrId.trim().toLowerCase();
+
+    // Check if code matches any item assigned to this rental
+    String? matchedItemId;
+    for (final itemId in rental.inventoryItemIds) {
+      if (itemId.toLowerCase() == trimmedCode) {
+        matchedItemId = itemId;
+        break;
+      }
+      final invItem = _inventory.firstWhere(
+        (i) => i.id == itemId,
+        orElse: () => InventoryItem(id: '', name: '', category: ''),
+      );
+      if (invItem.id.isNotEmpty) {
+        if (invItem.barcode != null && invItem.barcode!.trim().toLowerCase() == trimmedCode) {
+          matchedItemId = itemId;
+          break;
+        }
+        if (invItem.serialNumber != null && invItem.serialNumber!.trim().toLowerCase() == trimmedCode) {
+          matchedItemId = itemId;
+          break;
+        }
+      }
+    }
+
+    if (matchedItemId != null) {
+      if (!rental.verifiedReturnItemIds.contains(matchedItemId)) {
+        final updatedVerified = List<String>.from(rental.verifiedReturnItemIds)..add(matchedItemId);
+        _rentals[rentalIndex] = rental.copyWith(verifiedReturnItemIds: updatedVerified);
+        _saveData();
+        notifyListeners();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void toggleRentalItemVerified(String rentalId, String itemId) {
+    final rentalIndex = _rentals.indexWhere((r) => r.id == rentalId);
+    if (rentalIndex == -1) return;
+
+    final rental = _rentals[rentalIndex];
+    final updatedVerified = List<String>.from(rental.verifiedReturnItemIds);
+    if (updatedVerified.contains(itemId)) {
+      updatedVerified.remove(itemId);
+    } else {
+      updatedVerified.add(itemId);
+    }
+    _rentals[rentalIndex] = rental.copyWith(verifiedReturnItemIds: updatedVerified);
+    _saveData();
+    notifyListeners();
+  }
+
+  void resetRentalVerification(String rentalId) {
+    final rentalIndex = _rentals.indexWhere((r) => r.id == rentalId);
+    if (rentalIndex != -1) {
+      _rentals[rentalIndex] = _rentals[rentalIndex].copyWith(verifiedReturnItemIds: []);
       _saveData();
       notifyListeners();
     }

@@ -6,6 +6,7 @@ class Rental {
   final String expectedReturnDate;
   final String status; // 'Active', 'Returned'
   final List<String> inventoryItemIds;
+  final List<String> verifiedReturnItemIds; // Items verified during check-in/return
   final String? notes;
   final DateTime createdAt;
 
@@ -17,9 +18,19 @@ class Rental {
     required this.expectedReturnDate,
     this.status = 'Active',
     required this.inventoryItemIds,
+    List<String>? verifiedReturnItemIds,
     this.notes,
     DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
+  })  : verifiedReturnItemIds = verifiedReturnItemIds ?? [],
+        createdAt = createdAt ?? DateTime.now();
+
+  bool get isFullyVerified =>
+      inventoryItemIds.isNotEmpty &&
+      inventoryItemIds.every((id) => verifiedReturnItemIds.contains(id));
+
+  int get verifiedCount => verifiedReturnItemIds.length;
+  int get totalCount => inventoryItemIds.length;
+  bool isItemVerified(String itemId) => verifiedReturnItemIds.contains(itemId);
 
   Rental copyWith({
     String? id,
@@ -29,6 +40,7 @@ class Rental {
     String? expectedReturnDate,
     String? status,
     List<String>? inventoryItemIds,
+    List<String>? verifiedReturnItemIds,
     String? notes,
     DateTime? createdAt,
   }) {
@@ -40,6 +52,7 @@ class Rental {
       expectedReturnDate: expectedReturnDate ?? this.expectedReturnDate,
       status: status ?? this.status,
       inventoryItemIds: inventoryItemIds ?? this.inventoryItemIds,
+      verifiedReturnItemIds: verifiedReturnItemIds ?? this.verifiedReturnItemIds,
       notes: notes ?? this.notes,
       createdAt: createdAt ?? this.createdAt,
     );
@@ -54,6 +67,7 @@ class Rental {
       'expectedReturnDate': expectedReturnDate,
       'status': status,
       'inventoryItemIds': inventoryItemIds,
+      'verifiedReturnItemIds': verifiedReturnItemIds,
       'notes': notes,
       'createdAt': createdAt.toIso8601String(),
     };
@@ -68,6 +82,7 @@ class Rental {
       expectedReturnDate: json['expectedReturnDate'],
       status: json['status'] ?? 'Active',
       inventoryItemIds: List<String>.from(json['inventoryItemIds'] ?? []),
+      verifiedReturnItemIds: List<String>.from(json['verifiedReturnItemIds'] ?? []),
       notes: json['notes'],
       createdAt: json['createdAt'] != null
           ? DateTime.parse(json['createdAt'])
