@@ -199,24 +199,63 @@ class ShareBookingLinkDialog extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Simulate Client Booking Button (Test Flow)
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    ClientBookingSheet.show(context);
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: StitchTheme.primary,
-                    side: BorderSide(color: StitchTheme.primary, width: 1.5),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              // Preview Client Portal Action Tile
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pop();
+                  ClientBookingSheet.show(context);
+                },
+                borderRadius: BorderRadius.circular(14),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: StitchTheme.surfaceContainerHigh.withValues(alpha: 0.7),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: StitchTheme.outlineVariant),
                   ),
-                  icon: const Icon(Icons.smartphone, size: 18),
-                  label: const Text(
-                    'Preview & Simulate Client Booking',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: StitchTheme.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.visibility_outlined,
+                          size: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Preview Client Portal',
+                              style: StitchTheme.bodyMd(context).copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              'Test the client booking experience',
+                              style: StitchTheme.bodySm(context).copyWith(
+                                color: StitchTheme.outline,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 14,
+                        color: StitchTheme.outline,
+                      ),
+                    ],
                   ),
                 ),
               ),
