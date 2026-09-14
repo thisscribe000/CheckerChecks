@@ -26,7 +26,17 @@ class AppProvider with ChangeNotifier {
   List<InventoryItem> get inventory => _inventory;
   List<Gig> get gigs => _gigs;
   List<Rental> get rentals => _rentals;
+  List<Rental> get pendingRentals => _rentals.where((r) => r.status == 'Pending').toList();
+  List<Rental> get activeRentals => _rentals.where((r) => r.status == 'Active').toList();
+  List<Rental> get pastRentals => _rentals.where((r) => r.status == 'Returned' || r.status == 'Declined').toList();
+  int get pendingRentalsCount => pendingRentals.length;
+  List<InventoryItem> get availableInventory => _inventory.where((i) => i.rentalStatus == 'Available').toList();
 
+  String getBookingLink() {
+    final slug = _userName.trim().toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '-');
+    final cleanSlug = slug.isEmpty ? 'studio' : slug;
+    return 'https://checkerchecks.app/rent/$cleanSlug';
+  }
   Gig? get activeGig {
     if (_activeGig != null) {
       final found = _gigs.where((g) => g.id == _activeGig!.id).toList();
@@ -708,6 +718,78 @@ class AppProvider with ChangeNotifier {
       _saveData();
       notifyListeners();
     }
+  }
+
+  Rental receiveRentalRequest({
+    required String customerName,
+    required String customerContact,
+    required String startDate,
+    required String expectedReturnDate,
+    required List<String> inventoryItemIds,
+    String? projectShootName,
+    String? notes,
+    String bookingSource = 'link',
+  }) {
+    final newRequest = Rental(
+      id: 'req-${DateTime.now().millisecondsSinceEpoch}',
+      customerName: customerName,
+      customerContact: customerContact,
+      startDate: startDate,
+      expectedReturnDate: expectedReturnDate,
+      inventoryItemIds: inventoryItemIds,
+      projectShootName: projectShootName,
+      notes: notes,
+      status: 'Pending',
+      bookingSource: bookingSource,
+    );
+    _rentals.insert(0, newRequest);
+    _saveData();
+    notifyListeners();
+    return newRequest;
+  }
+
+  bool approveRental(String rentalId) {
+    final index = _rentals.indexWhere((r) => r.id == rentalId);
+    if (index == -1) return false;
+
+    final rental = _rentals[index];
+    _rentals[index] = rental.copyWith(status: 'Active');
+
+    // Update all assigned inventory items to 'Rented Out'
+    for (final itemId in rental.inventoryItemIds) {
+      final invIndex = _inventory.indexWhere((i) => i.id == itemId);
+      if (invIndex != -1) {
+        _inventory[invIndex] = _inventory[invIndex].copyWith(
+          rentalStatus: 'Rented Out',
+          activeRentalId: rental.id,
+        );
+      }
+    }
+
+    _saveData();
+    notifyListeners();
+    return true;
+  }
+
+  void declineRental(String rentalId, {String? reason}) {
+    final index = _rentals.indexWhere((r) => r.id == rentalId);
+    if (index == -1) return;
+
+    final rental = _rentals[index];
+    String updatedNotes = rental.notes ?? '';
+    if (reason != null && reason.trim().isNotEmpty) {
+      updatedNotes = updatedNotes.isEmpty
+          ? 'Declined: $reason'
+          : '$updatedNotes (Declined: $reason)';
+    }
+
+    _rentals[index] = rental.copyWith(
+      status: 'Declined',
+      notes: updatedNotes.isEmpty ? null : updatedNotes,
+    );
+
+    _saveData();
+    notifyListeners();
   }
 
   bool verifyRentalItemReturn(String rentalId, String codeOrId) {

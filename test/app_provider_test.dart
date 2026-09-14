@@ -341,5 +341,85 @@ void main() {
       final resetRental = provider.rentals.firstWhere((r) => r.id == rental.id);
       expect(resetRental.verifiedCount, 0);
     });
+
+    test('Client booking request receipt, approval, and decline workflow', () async {
+      final provider = AppProvider();
+      await Future.delayed(const Duration(milliseconds: 100));
+
+      // Clear any existing rentals for clean testing
+      final item1 = provider.inventory[0];
+      final item2 = provider.inventory[1];
+
+      expect(item1.rentalStatus, 'Available');
+      expect(item2.rentalStatus, 'Available');
+
+      // 1. Receive a rental request via client booking link
+      final request = provider.receiveRentalRequest(
+        customerName: 'Elena Fisher',
+        customerContact: 'elena@naughtydog.test',
+        startDate: 'Oct 15, 2026',
+        expectedReturnDate: 'Oct 18, 2026',
+        inventoryItemIds: [item1.id, item2.id],
+        projectShootName: 'Uncharted Documentary',
+        notes: 'Needs morning pickup and fully charged batteries',
+        bookingSource: 'link',
+      );
+
+      expect(request.status, 'Pending');
+      expect(request.isPending, true);
+      expect(request.isBookedViaLink, true);
+      expect(request.projectShootName, 'Uncharted Documentary');
+      expect(provider.pendingRentalsCount, 1);
+      expect(provider.pendingRentals.first.id, request.id);
+
+      // Verify that items are NOT locked to 'Rented Out' while still pending
+      final pendingItem1 = provider.inventory.firstWhere((i) => i.id == item1.id);
+      expect(pendingItem1.rentalStatus, 'Available');
+      expect(pendingItem1.activeRentalId, isNull);
+
+      // 2. Approve the rental request
+      final approved = provider.approveRental(request.id);
+      expect(approved, true);
+
+      expect(provider.pendingRentalsCount, 0);
+      expect(provider.activeRentals.length, 1);
+      final activeRental = provider.activeRentals.first;
+      expect(activeRental.id, request.id);
+      expect(activeRental.status, 'Active');
+      expect(activeRental.isActive, true);
+
+      // Verify that items ARE now locked to 'Rented Out'
+      final rentedItem1 = provider.inventory.firstWhere((i) => i.id == item1.id);
+      final rentedItem2 = provider.inventory.firstWhere((i) => i.id == item2.id);
+      expect(rentedItem1.rentalStatus, 'Rented Out');
+      expect(rentedItem1.activeRentalId, request.id);
+      expect(rentedItem2.rentalStatus, 'Rented Out');
+      expect(rentedItem2.activeRentalId, request.id);
+
+      // 3. Test Decline workflow on a second request
+      final request2 = provider.receiveRentalRequest(
+        customerName: 'Victor Sullivan',
+        customerContact: 'sully@treasure.test',
+        startDate: 'Nov 1, 2026',
+        expectedReturnDate: 'Nov 3, 2026',
+        inventoryItemIds: [item1.id],
+        notes: 'Quick test shoot',
+      );
+
+      expect(provider.pendingRentalsCount, 1);
+      provider.declineRental(request2.id, reason: 'Equipment booked for another production');
+
+      expect(provider.pendingRentalsCount, 0);
+      expect(provider.pastRentals.any((r) => r.id == request2.id), true);
+
+      final declinedRental = provider.rentals.firstWhere((r) => r.id == request2.id);
+      expect(declinedRental.status, 'Declined');
+      expect(declinedRental.isDeclined, true);
+      expect(declinedRental.notes?.contains('Declined: Equipment booked'), true);
+
+      // 4. Test booking link generation
+      final link = provider.getBookingLink();
+      expect(link.startsWith('https://checkerchecks.app/rent/'), true);
+    });
   });
 }

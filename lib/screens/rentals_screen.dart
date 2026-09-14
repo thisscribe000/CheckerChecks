@@ -5,6 +5,7 @@ import '../theme/stitch_theme.dart';
 import '../models/rental.dart';
 import '../widgets/equipment_scanner_sheet.dart';
 import '../widgets/qr_code_tag_dialog.dart';
+import '../widgets/share_booking_link_dialog.dart';
 
 class RentalsScreen extends StatefulWidget {
   const RentalsScreen({super.key});
@@ -20,7 +21,7 @@ class _RentalsScreenState extends State<RentalsScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -32,15 +33,21 @@ class _RentalsScreenState extends State<RentalsScreen>
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<AppProvider>(context);
-    final active =
-        provider.rentals.where((r) => r.status == 'Active').toList();
-    final past =
-        provider.rentals.where((r) => r.status == 'Returned').toList();
+    final pending = provider.pendingRentals;
+    final active = provider.activeRentals;
+    final past = provider.pastRentals;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Rentals'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.link),
+            tooltip: 'Share Booking Link',
+            onPressed: () {
+              ShareBookingLinkDialog.show(context);
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.qr_code_scanner),
             tooltip: 'Scan Gear',
@@ -50,7 +57,8 @@ class _RentalsScreenState extends State<RentalsScreen>
           ),
           IconButton(
             icon: const Icon(Icons.help_outline),
-            onPressed: () {},
+            tooltip: 'How Rentals Work',
+            onPressed: () => _showRentalsHelpDialog(context),
           ),
           const SizedBox(width: 4),
         ],
@@ -59,8 +67,27 @@ class _RentalsScreenState extends State<RentalsScreen>
           labelColor: StitchTheme.primary,
           unselectedLabelColor: StitchTheme.outline,
           indicatorColor: StitchTheme.primary,
-          labelStyle: StitchTheme.headlineMd(context).copyWith(fontSize: 14),
+          labelStyle: StitchTheme.headlineMd(context).copyWith(fontSize: 13),
           tabs: [
+            Tab(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('REQUESTS (${pending.length})'),
+                  if (pending.isNotEmpty) ...[
+                    const SizedBox(width: 4),
+                    Container(
+                      width: 7,
+                      height: 7,
+                      decoration: const BoxDecoration(
+                        color: Colors.blueAccent,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
             Tab(text: 'ACTIVE (${active.length})'),
             Tab(text: 'PAST (${past.length})'),
           ],
@@ -69,6 +96,7 @@ class _RentalsScreenState extends State<RentalsScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
+          _PendingRequestsList(rentals: pending),
           _RentalList(rentals: active, isActive: true),
           _RentalList(rentals: past, isActive: false),
         ],
@@ -84,9 +112,418 @@ class _RentalsScreenState extends State<RentalsScreen>
     );
   }
 
+  void _showRentalsHelpDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        title: const Row(
+          children: [
+            Icon(Icons.lightbulb_outline, color: Colors.amber),
+            SizedBox(width: 8),
+            Text('Rental Workflow'),
+          ],
+        ),
+        content: const SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'CheckerChecks empowers your equipment rental operations in 3 simple steps:\n',
+                style: TextStyle(fontSize: 13),
+              ),
+              Text(
+                '1. Share Booking Link',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              Text(
+                'Send your custom rental link or show the QR code to clients. Clients choose available equipment and submit their dates and details.',
+                style: TextStyle(fontSize: 12, color: Colors.black87),
+              ),
+              SizedBox(height: 10),
+              Text(
+                '2. Approve in "Requests"',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              Text(
+                'Incoming bookings land in the "Requests" tab. Review the gear requested and tap "Approve & Check Out" to lock the items to Rented Out.',
+                style: TextStyle(fontSize: 12, color: Colors.black87),
+              ),
+              SizedBox(height: 10),
+              Text(
+                '3. Scan-to-Return Check-in',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              ),
+              Text(
+                'When the client brings gear back, open the rental and tap "Scan to Return" to verify each piece with your camera.',
+                style: TextStyle(fontSize: 12, color: Colors.black87),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: StitchTheme.primary,
+              foregroundColor: StitchTheme.onPrimary,
+            ),
+            child: const Text('Got it'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showNewRentalDialog(BuildContext context, AppProvider provider) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => const _CreateRentalScreen()),
+    );
+  }
+}
+
+class _PendingRequestsList extends StatelessWidget {
+  final List<Rental> rentals;
+
+  const _PendingRequestsList({required this.rentals});
+
+  @override
+  Widget build(BuildContext context) {
+    if (rentals.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: StitchTheme.primary.withValues(alpha: 0.08),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.inbox_outlined, size: 48, color: StitchTheme.primary),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'No Pending Requests',
+                style: StitchTheme.headlineMd(context).copyWith(fontSize: 18),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Share your booking link with clients so they can browse your gear and submit requests directly.',
+                style: StitchTheme.bodyMd(context).copyWith(color: StitchTheme.outline),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () => ShareBookingLinkDialog.show(context),
+                icon: const Icon(Icons.link, size: 18),
+                label: const Text('Share Booking Link'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: StitchTheme.primary,
+                  foregroundColor: StitchTheme.onPrimary,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 100),
+      itemCount: rentals.length,
+      itemBuilder: (context, index) {
+        final rental = rentals[index];
+        return _PendingRequestCard(rental: rental);
+      },
+    );
+  }
+}
+
+class _PendingRequestCard extends StatelessWidget {
+  final Rental rental;
+
+  const _PendingRequestCard({required this.rental});
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<AppProvider>(context);
+    final requestedGear = provider.inventory
+        .where((i) => rental.inventoryItemIds.contains(i.id))
+        .toList();
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: StitchTheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: Colors.blue.withValues(alpha: 0.4),
+          width: 1.5,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header: Name + Badge
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  rental.customerName,
+                  style: StitchTheme.headlineMd(context).copyWith(fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade100,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.link, size: 12, color: Colors.blue.shade900),
+                    const SizedBox(width: 4),
+                    Text(
+                      rental.isBookedViaLink ? 'LINK REQUEST' : 'PENDING',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue.shade900,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          if (rental.projectShootName != null && rental.projectShootName!.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Row(
+              children: [
+                Icon(Icons.movie_outlined, size: 14, color: StitchTheme.outline),
+                const SizedBox(width: 6),
+                Text(
+                  rental.projectShootName!,
+                  style: StitchTheme.bodySm(context).copyWith(fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ],
+
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              const Icon(Icons.event_outlined, size: 14, color: StitchTheme.outline),
+              const SizedBox(width: 6),
+              Text(
+                '${rental.startDate} — ${rental.expectedReturnDate}',
+                style: StitchTheme.bodyMd(context),
+              ),
+            ],
+          ),
+
+          if (rental.customerContact.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                const Icon(Icons.contact_phone_outlined, size: 14, color: StitchTheme.outline),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    rental.customerContact,
+                    style: StitchTheme.bodySm(context).copyWith(color: StitchTheme.outline),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
+
+          const SizedBox(height: 12),
+          const Divider(height: 1),
+          const SizedBox(height: 10),
+
+          // Requested Gear summary
+          Text(
+            'REQUESTED GEAR (${requestedGear.length}):',
+            style: StitchTheme.labelCaps(context).copyWith(fontSize: 11),
+          ),
+          const SizedBox(height: 6),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: requestedGear.map((gear) {
+              final isRentedToOther = gear.rentalStatus == 'Rented Out';
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isRentedToOther
+                      ? Colors.amber.withValues(alpha: 0.15)
+                      : StitchTheme.surfaceContainerHigh,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: isRentedToOther
+                        ? Colors.amber.shade700
+                        : StitchTheme.outline.withValues(alpha: 0.2),
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isRentedToOther ? Icons.warning_amber_rounded : Icons.check_circle_outline,
+                      size: 13,
+                      color: isRentedToOther ? Colors.amber.shade900 : StitchTheme.primary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      gear.name,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: isRentedToOther ? Colors.amber.shade900 : StitchTheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+
+          if (rental.notes != null && rental.notes!.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: StitchTheme.surfaceContainerHigh.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Text(
+                'Note: ${rental.notes}',
+                style: TextStyle(fontSize: 11, fontStyle: FontStyle.italic, color: StitchTheme.outline),
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 16),
+
+          // Action Buttons: Decline / Approve
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => _confirmDecline(context, provider, rental),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: Colors.red.shade700,
+                    side: BorderSide(color: Colors.red.shade300),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  child: const Text('Decline'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                flex: 2,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    provider.approveRental(rental.id);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                            const SizedBox(width: 8),
+                            Expanded(child: Text('Approved ${rental.customerName}! Equipment marked Rented Out.')),
+                          ],
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.green.shade800,
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: StitchTheme.primary,
+                    foregroundColor: StitchTheme.onPrimary,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  ),
+                  icon: const Icon(Icons.check, size: 18),
+                  label: const Text('Approve & Check Out', style: TextStyle(fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmDecline(BuildContext context, AppProvider provider, Rental rental) {
+    final reasonController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Text('Decline Request?'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Are you sure you want to decline the rental request for ${rental.customerName}?'),
+            const SizedBox(height: 12),
+            TextField(
+              controller: reasonController,
+              decoration: const InputDecoration(
+                labelText: 'Reason (Optional)',
+                hintText: 'e.g. Equipment scheduled for maintenance',
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              provider.declineRental(rental.id, reason: reasonController.text.trim());
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Rental request declined.'),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red.shade700,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Decline'),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -148,15 +585,17 @@ class _RentalList extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isActive
                             ? StitchTheme.warningContainer
-                            : StitchTheme.surfaceContainerHigh,
+                            : (rental.isDeclined ? Colors.red.shade100 : StitchTheme.surfaceContainerHigh),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        isActive ? 'OUT' : 'RETURNED',
+                        isActive
+                            ? 'OUT'
+                            : (rental.isDeclined ? 'DECLINED' : 'RETURNED'),
                         style: StitchTheme.labelCaps(context).copyWith(
                           color: isActive
                               ? StitchTheme.warning
-                              : StitchTheme.outline,
+                              : (rental.isDeclined ? Colors.red.shade900 : StitchTheme.outline),
                         ),
                       ),
                     ),

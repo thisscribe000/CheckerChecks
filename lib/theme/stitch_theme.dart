@@ -47,6 +47,13 @@ class StitchTheme {
         color: primary,
       );
 
+  static TextStyle titleLg(BuildContext context) => GoogleFonts.inter(
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
+        letterSpacing: -0.2,
+        color: primary,
+      );
+
   static TextStyle bodyLg(BuildContext context) => GoogleFonts.inter(
         fontSize: 15,
         fontWeight: FontWeight.w400,
@@ -57,6 +64,12 @@ class StitchTheme {
         fontSize: 13,
         fontWeight: FontWeight.w400,
         color: onSurface,
+      );
+
+  static TextStyle bodySm(BuildContext context) => GoogleFonts.inter(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: onSurfaceVariant,
       );
 
   static TextStyle labelCaps(BuildContext context) => GoogleFonts.inter(
