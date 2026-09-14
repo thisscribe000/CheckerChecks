@@ -536,9 +536,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('BARCODE / QR TAG', style: StitchTheme.labelCaps(context)),
-                    TextButton.icon(
-                      onPressed: () async {
+                    Expanded(
+                      child: Text(
+                        'BARCODE / QR TAG',
+                        style: StitchTheme.labelCaps(context),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    InkWell(
+                      onTap: () async {
                         final scanned = await EquipmentScannerSheet.show(
                           context,
                           mode: ScannerMode.assignBarcode,
@@ -550,8 +557,24 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           });
                         }
                       },
-                      icon: const Icon(Icons.qr_code_scanner, size: 16),
-                      label: const Text('Scan with Camera'),
+                      borderRadius: BorderRadius.circular(6),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.qr_code_scanner, size: 15, color: StitchTheme.primary),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Scan',
+                              style: StitchTheme.labelCaps(context).copyWith(
+                                color: StitchTheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
